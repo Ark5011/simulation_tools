@@ -8,8 +8,8 @@ class Tg(models.Model):
     casein = models.FloatField()
     whey_protein = models.FloatField()
     lactose = models.FloatField()
-    gos = models.FloatField()
-    pdx = models.FloatField()
+    GOS = models.FloatField()
+    PDX = models.FloatField()
 
     # def __str__(self):
     #     return self.title
@@ -19,13 +19,13 @@ class Cp(models.Model):
     casein = models.FloatField()
     whey_protein = models.FloatField()
     lactose = models.FloatField()
-    gos = models.FloatField()
-    pdx = models.FloatField()
+    GOS = models.FloatField()
+    PDX = models.FloatField()
     
 class Formulation(models.Model):
     water = models.FloatField()
     casein = models.FloatField()
     whey_protein = models.FloatField()
     lactose = models.FloatField()
-    gos = models.FloatField()
-    pdx = models.FloatField()
+    GOS = models.FloatField()
+    PDX = models.FloatField()

@@ -1,0 +1,17 @@
+{% extends 'calculator/base.html' %}
+
+
+{% block content %}
+	<div class="row mt-5">
+		<div class="col-12 col-md-6 mx-md-auto">
+			<h1>Tg Couchman Calculator</h1>
+
+			<form method="POST">
+				{% csrf_token %}
+				{{ form.as_p }}
+
+				<button class="btn btn-primary" type="submit">Calculate</button>
+			</form>
+		</div>
+	</div>
+{% endblock content %}
