@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from calculator.views import Index
+from tg_couchman.views import Index
 
 urlpatterns = [
     path('admin/', admin.site.urls),

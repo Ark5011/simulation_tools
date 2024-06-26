@@ -23,7 +23,7 @@ class Cp(models.Model):
     PDX = models.FloatField()
     
 class Formulation(models.Model):
-    water = models.FloatField()
+    water_min = models.FloatField()
     casein = models.FloatField()
     whey_protein = models.FloatField()
     GOS = models.FloatField()

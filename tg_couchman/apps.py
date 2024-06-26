@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CalculatorConfig(AppConfig):
+class Tg_couchmanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'calculator'
+    name = 'tg_couchman'
