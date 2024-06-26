@@ -53,7 +53,7 @@ class Index(View):
             final_tg = cpwitg_sum / cpwi_sum
             
             context = {
-                'tg': final_tg,
+                'tg': round(final_tg,3),
             }
             
             return render(request, 'calculator/result.html', context)
