@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from tg_couchman.views import Index
+from simulation_tools.views import Index, Gt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Index.as_view(), name='index')
+    path('', Index.as_view(), name='index'),
+    path('gt/', Gt.as_view(), name='gt')
 ]
