@@ -79,10 +79,8 @@ class Index(View):
             final_tg_max = cpwitg_sum_max / cpwi_sum_max
             
             ingredients = ['Water', 'Casein', 'Whey Protein', 'Lactose', 'GOS', 'PDX', 'Sum']
-            tg_values = [tg_values[0].water, tg_values[0].casein, tg_values[0].whey_protein, tg_values[0].lactose, tg_values[0].GOS, tg_values[0].PDX, 0]
-            tg_values = [round(x,3) for x in tg_values]
-            cp_values = [cp_values[0].water, cp_values[0].casein, cp_values[0].whey_protein, cp_values[0].lactose, cp_values[0].GOS, cp_values[0].PDX, 0]
-            cp_values = [round(x,3) for x in cp_values]
+            tg_values = [tg_values[0].water, tg_values[0].casein, tg_values[0].whey_protein, tg_values[0].lactose, tg_values[0].GOS, tg_values[0].PDX, '']
+            cp_values = [cp_values[0].water, cp_values[0].casein, cp_values[0].whey_protein, cp_values[0].lactose, cp_values[0].GOS, cp_values[0].PDX, '']
             
             f_values_min = [f_water_min, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX, f_sum_min]
             f_values_min = [round(x,3) for x in f_values_min]
