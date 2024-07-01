@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class Simulation_toolsConfig(AppConfig):
+class Tg_couchmanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'simulation_tools'
+    name = 'tg_couchman'

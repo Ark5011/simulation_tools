@@ -1,7 +1,12 @@
-from django.conf import settings
 from django.db import models
 
+class Project(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    more_info = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
 
 class Tg(models.Model):
     water = models.FloatField()

@@ -1,15 +1,12 @@
 from django.shortcuts import render
-from django.views import View
+from django.http import HttpResponse
+import pandas as pd
 from .forms import TgForm
-from .models import Tg, Cp, Formulation
+from .models import Tg, Cp
 
 # Create your views here.
-class Index(View):
-    def get(self, request):
-        form = TgForm()
-        return render(request, 'simulation_tools/index.html', {'form': form})
-
-    def post(self, request):
+def tg_form(request):
+    if request.method == "POST":
         form = TgForm(request.POST)
         if form.is_valid():
             #formulation values
@@ -114,9 +111,9 @@ class Index(View):
             final_tg_target_list = [""] * 6 + [round(final_tg_target,3)]
             final_tg_max_list = [""] * 6 + [round(final_tg_max,3)]
             
-            zipped_min = zip(ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list)
-            zipped_target = zip(ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list)
-            zipped_max = zip(ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list)
+            zipped_min = list(zip(ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list))
+            zipped_target = list(zip(ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list))
+            zipped_max = list(zip(ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list))
             
             context = {
                 'tg_min': round(final_tg_min,3),
@@ -126,12 +123,48 @@ class Index(View):
                 'zipped_min': zipped_min,
                 'zipped_target': zipped_target,
                 'zipped_max': zipped_max,
-                         
+                            
             }
             
-            return render(request, 'simulation_tools/result.html', context)
+            request.session['tg_data'] = [context]
             
-class Gt(View):
-    def get(self, request):
+            return render(request, 'tg_couchman/result.html', context)
+    else:
         form = TgForm()
-        return render(request, 'simulation_tools/index.html', {'form': form})
+        return render(request, 'tg_couchman/index.html', {'form': form})
+    
+def exportFile(request):
+    tg_data = request.session['tg_data']
+    
+    excel_data = [
+        ['STAGE 3', '', '', 'Min Moisture'],
+        ['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'],
+    ]
+    for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in tg_data[0]['zipped_min']:
+        row = [ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list]
+        excel_data.append(row)
+    
+    excel_data.append([''])
+    excel_data.append(['STAGE 3', '', '', 'Target Moisture'])
+    excel_data.append(['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'])
+    
+    for ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list in tg_data[0]['zipped_target']:
+        row = [ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list]
+        excel_data.append(row)
+        
+    excel_data.append([''])
+    excel_data.append(['STAGE 3', '', '', 'Max Moisture'])
+    excel_data.append(['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'])
+    
+    for ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list in tg_data[0]['zipped_max']:
+        row = [ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list]
+        excel_data.append(row)
+    
+    df = pd.DataFrame(excel_data)
+    
+    resp = HttpResponse(content_type='text/csv')
+    resp['Content-Disposition'] = 'attachment; filename=Tg_Couchman.csv'
+    df.to_csv(path_or_buf=resp, sep=',', index=False)
+    
+    return resp
+            

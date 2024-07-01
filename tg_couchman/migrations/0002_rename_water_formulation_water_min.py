@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('simulation_tools', '0001_initial'),
+        ('tg_couchman', '0001_initial'),
     ]
 
     operations = [

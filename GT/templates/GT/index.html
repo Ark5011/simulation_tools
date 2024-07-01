@@ -1,0 +1,57 @@
+{% extends 'tg_couchman/base.html' %}
+
+
+{% block content %}
+  
+<div class="row mt-5">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <h1>G&T</h1>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Your x and y coordinates
+            const xCoordinates = {{ x_values|safe }}; // Replace with your x coordinates
+            const yCoordinates = {{ y_values|safe }}; // Replace with your y coordinates
+        
+            // Get the canvas element
+            const ctx = document.getElementById('myChart').getContext('2d');
+        
+            // Create the line chart
+            const myChart = new Chart(ctx, {
+                type: 'line', // Type of chart
+                data: {
+                    labels: xCoordinates, // X-axis labels
+                    datasets: [{
+                        label: 'My Dataset', // Label for the dataset
+                        data: yCoordinates, // Y-axis data
+                        fill: false, // No fill under the line
+                        borderColor: 'rgb(75, 192, 192)', // Line color
+                        tension: 0.1 // Line tension
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'X Axis Label'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Y Axis Label'
+                            }
+                        }
+                    }
+                }
+            });
+          </script>
+        
+        
+    </div>
+</div>
+{% endblock content %}
+

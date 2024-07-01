@@ -1,10 +1,17 @@
-{% extends 'simulation_tools/base.html' %}
+{% extends 'tg_couchman/base.html' %}
 
 {% block content %}
 
 	<div class="row mt-5">
 		<div class="col-12 col-md-6 mx-md-auto">
 			<h1>Tg Couchman Results</h1>
+			
+			<div class="mt-5">
+				<form name="exportFile" action="/export/" method="get">
+					<input type="submit" id="exportFile" name="exportFile" value="Export">
+					</form>
+			</div>
+
 			<div class="mt-5">
 				<table class="table">
 					<thead>
