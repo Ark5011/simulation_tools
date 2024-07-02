@@ -26,14 +26,14 @@ class Cp(models.Model):
     lactose = models.FloatField()
     GOS = models.FloatField()
     PDX = models.FloatField()
-    
+
 class Formulation(models.Model):
     water_min = models.FloatField()
     casein = models.FloatField()
     whey_protein = models.FloatField()
     GOS = models.FloatField()
     PDX = models.FloatField()
-    
+
     # @property
     # def lactose(self):
     #     lactose = 50.9 - self.GOS + self.PDX
