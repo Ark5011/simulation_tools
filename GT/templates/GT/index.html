@@ -2,55 +2,100 @@
 
 
 {% block content %}
-  
-<div class="row mt-5">
+
+<div row="mt-5">
     <div class="col-12 col-md-6 mx-md-auto">
-        <h1>G&T</h1>
-        <div>
-            <canvas id="myChart"></canvas>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        
+        <div id="myPlot"></div>
         <script>
-            // Your x and y coordinates
-            const xCoordinates = {{ x_values|safe }}; // Replace with your x coordinates
-            const yCoordinates = {{ y_values|safe }}; // Replace with your y coordinates
-        
-            // Get the canvas element
-            const ctx = document.getElementById('myChart').getContext('2d');
-        
-            // Create the line chart
-            const myChart = new Chart(ctx, {
-                type: 'line', // Type of chart
-                data: {
-                    labels: xCoordinates, // X-axis labels
-                    datasets: [{
-                        label: 'My Dataset', // Label for the dataset
-                        data: yCoordinates, // Y-axis data
-                        fill: false, // No fill under the line
-                        borderColor: 'rgb(75, 192, 192)', // Line color
-                        tension: 0.1 // Line tension
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'X Axis Label'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Y Axis Label'
-                            }
-                        }
-                    }
+            var exp = "-16.096*x + 92.853";
+
+            // Generate values
+            var xValues = [];
+            var yValues = [];
+            for (let x = 0; x <= 6; x += 1) {
+            yValues.push(eval(exp));
+            xValues.push(x);
+            };
+
+            // Define Data
+            var trace1 = {
+                x: [0, 1, 2, 3, 4, 5, 6],
+                y: [120, 98.75, 80.4310344827586, 64.4758064516129, 50.4545454545454, 38.0357142857142, 26.9594594594594],
+                mode: "lines",
+                name: 'yolo'
+            };
+
+            var trace2 = {
+                x: xValues,
+                y: yValues,
+                mode: "lines",
+                name: "y = -16.096x + 92.853"
+            };
+
+            var trace3 = {
+                x: [1.50, 1.75, 2.00],
+                y: [68.7361215575773, 64.6310742532672, 60.6881835944659],
+                mode: "markers",
+                name: 'potato'
+            };
+
+            var trace4 = {
+                x: [1.50, 1.75, 2.00],
+                y: [98, 95, 91],
+                mode: "markers",
+                name: 'Donald trump',
+                marker: {
+                    symbol: 'triangle-up',
+                    size: 12
                 }
-            });
-          </script>
-        
-        
+            };
+
+            var xAxisAt30 = {
+                type: 'line',
+                x0: 0,
+                x1: 1,
+                xref: 'paper',
+                y0: 30,
+                y1: 30,
+                line: {
+                    color: 'black',
+                    width: 1,
+                }
+            };
+
+            var data = [trace1, trace2, trace3, trace4];
+            const layout = {
+                title: "G&T Simulation",
+                yaxis: {
+                    range: [30, 120],
+                    title: "Onset Tg [°C]"
+                },
+                xaxis: {
+                    title: "Water content [%]"
+                },
+                shapes: [xAxisAt30],  // Add the horizontal line to the layout
+                annotations: [
+                    {
+                        x: 0,
+                        y: 30,
+                        xref: 'paper',
+                        yref: 'y',
+                        text: '',
+                        showarrow: false,
+                        font: {
+                            size: 12,
+                            color: 'black'
+                        },
+                        align: 'left'
+                    }
+                ]
+            };
+
+            // Display using Plotly
+            Plotly.newPlot("myPlot", data, layout);
+        </script>
     </div>
 </div>
 {% endblock content %}
