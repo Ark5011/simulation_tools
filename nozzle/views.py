@@ -52,8 +52,9 @@ def screen_for_orifice_range(k, orifice_num, ranges):
             results[key] = "**"
     return results
 
+@csrf_exempt
 def index(request):
-    return render(request, 'tool_one/nozzle_fe.html', {'input_data': {}})
+    return render(request, 'templates/index.html', {})
 
 @csrf_exempt
 def tdl(request):
@@ -187,7 +188,3 @@ def td(request):
 
         except (ValueError, KeyError) as e:
             return JsonResponse({'error': f"An error occurred: {e}"})
-
-@csrf_exempt
-def index(request):
-    return render(request, 'templates/index.html', {})
