@@ -9,8 +9,22 @@ class Gt(models.Model):
     def __str__(self):
         return self.name
 
-class Graph_w(models.Model):
-    W = models.FloatField()
+class aw_moisture(models.Model):
+    min_moisture = models.FloatField()
+    target_moisture = models.FloatField()
+    max_moisture = models.FloatField()
 
-class Graph_tg(models.Model):
-    Tg = models.FloatField()
+class wb_moisture(models.Model):
+    min_moisture = models.FloatField()
+    target_moisture = models.FloatField()
+    max_moisture = models.FloatField()
+    
+class ad_moisture(models.Model):
+    min_moisture = models.FloatField()
+    target_moisture = models.FloatField()
+    max_moisture = models.FloatField()
+    
+class tg_moisture(models.Model):
+    min_moisture = models.FloatField()
+    target_moisture = models.FloatField()
+    max_moisture = models.FloatField()

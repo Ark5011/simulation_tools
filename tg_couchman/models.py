@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Project(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
@@ -18,6 +19,11 @@ class Tg(models.Model):
 
     # def __str__(self):
     #     return self.title
+
+class Final_Tg(models.Model):
+    final_tg_min = models.FloatField()
+    final_tg_target = models.FloatField()
+    final_tg_max = models.FloatField()
 
 class Cp(models.Model):
     water = models.FloatField()
