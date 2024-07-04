@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+    * {
+        font-family: 'Montserrat', sans-serif;
+    }
+    body {
+        color: white;
+        padding-top: 70px;
+        background-color: #ffc9fd;
+        background: linear-gradient(to right, #fbb4df, #fe019a);
+    }
+    .navbar {
+        z-index: 1000;
+        background-color: white;
+        position: fixed;
+        width: 100%;
+        top: 0;
+    }
+
+    .navbar-collapse a {
+        color: black;
+        font-size: 20px;
+    }
+
+    .navbar-collapse a:hover {
+        color: #fe019a;
+    }
+
+    .card {
+        width: 18rem;
+        height: 20rem;
+        margin: 30px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    .card-title, .card-text {
+        color: black;
+        text-align: center;
+    }
+    .card-img {
+        height: 2in;
+        width: 2in;
+        object-fit: cover;
+        margin-bottom: 1rem;
+    }
+    .btn {
+        background-color: #fe019a;
+        color: white;
+        margin-top: auto;
+    }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: white; font-weight: bold;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="static/img/logo.png" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Archive</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="text-center my-4 display-3" style="font-weight: bold;">Home</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mass Balance Overview</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="http://localhost:5000/mass_balance" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Nozzle</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="#" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tg Couchman</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="{% url 'tg_couchman:tg_form' %}" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">G&T</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="{% url 'GT:gt_form' %}" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tools</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="#" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tools</h5>
+                    <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
+                    <a href="#" class="btn" id="mbBtn">Click Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+
+</script>
+</body>
+</html>

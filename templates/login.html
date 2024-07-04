@@ -211,13 +211,43 @@
             border-color: #fff;
             color: black;
         }
+
+        .register-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #fe019a;
+            color: #fff;
+            font-size: 12px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
+<a href="{% url 'register' %}" class="register-button">Register</a>
+<div class="row mt-5">
+    <div class="col-12 col-md-6 mx-md-auto">
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}  
+    </div>
+</div>
+
 <div class="container" id="container">
     <div class="form-container more-info">
-        <form  method="post">
+        <form id="moreInfoForm" method="post">
+            {% csrf_token %}
             <input type="text" name="factory" placeholder="Factory">
             <input type="text" name="line" placeholder="Line">
             <input type="text" name="product" placeholder="Product">
@@ -231,10 +261,11 @@
         </div>
     <div class="form-container sign-in">
         
-<form>
-    <input type="text" placeholder="Name">
-    <input type="text" placeholder="Password">
-    <input type="text" placeholder="Project">
+<form id="signInForm" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="User Name">
+    <input type="password" name="password" placeholder="Password">
+    <input type="text" name="project" placeholder="Project">
 </form>
 </div>
     <div class="toggle-container">
@@ -255,11 +286,20 @@
     const container = document.getElementById('container');
     const nextBtn = document.getElementById('next');
     const doneBtn = document.getElementById('done');
+    const moreInfoForm = document.getElementById('moreInfoForm');
+    const signInForm = document.getElementById('signInForm');
+
     nextBtn.addEventListener('click', () => {
         container.classList.add("active");
     });
     doneBtn.addEventListener('click', () => {
         container.classList.remove("active");
+    });
+
+    doneBtn.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent the default form submission
+        moreInfoForm.submit();
+        signInForm.submit();
     });
 </script>
 </body>
