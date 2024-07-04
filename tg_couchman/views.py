@@ -126,7 +126,7 @@ def tg_form(request):
                             
             }
             
-            request.session['tg_data'] = [context]
+            request.session['tg_data'] = context
             
             return render(request, 'tg_couchman/result.html', context)
     else:
@@ -140,7 +140,7 @@ def exportFile(request):
         ['STAGE 3', '', '', 'Min Moisture'],
         ['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'],
     ]
-    for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in tg_data[0]['zipped_min']:
+    for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in tg_data['zipped_min']:
         row = [ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list]
         excel_data.append(row)
     
@@ -148,7 +148,7 @@ def exportFile(request):
     excel_data.append(['STAGE 3', '', '', 'Target Moisture'])
     excel_data.append(['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'])
     
-    for ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list in tg_data[0]['zipped_target']:
+    for ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list in tg_data['zipped_target']:
         row = [ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list]
         excel_data.append(row)
         
@@ -156,7 +156,7 @@ def exportFile(request):
     excel_data.append(['STAGE 3', '', '', 'Max Moisture'])
     excel_data.append(['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'])
     
-    for ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list in tg_data[0]['zipped_max']:
+    for ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list in tg_data['zipped_max']:
         row = [ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list]
         excel_data.append(row)
     

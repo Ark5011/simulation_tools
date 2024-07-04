@@ -1,13 +1,18 @@
 from django.db import models
 
 # Create your models here.
-class Gt(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
-    more_info = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
+class Gt_input(models.Model):
+    aw_1 = models.FloatField()
+    aw_2 = models.FloatField()
+    aw_3 = models.FloatField()
+    aw_4 = models.FloatField()
+    aw_5 = models.FloatField()
+    wb_1 = models.FloatField()
+    wb_2 = models.FloatField()
+    wb_3 = models.FloatField()
+    wb_4 = models.FloatField()
+    wb_5 = models.FloatField()
+    
 
 class aw_moisture(models.Model):
     min_moisture = models.FloatField()
