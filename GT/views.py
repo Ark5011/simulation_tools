@@ -19,7 +19,7 @@ def gt_form(request):
             context = {
                 'Donald': 'Duck',
             }
-    return render(request, 'GT/index.html', context)
+    return render(request, 'GT/index.html')
 
 def exportFile(request):
     pass

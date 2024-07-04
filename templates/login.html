@@ -227,7 +227,43 @@
             text-transform: uppercase;
             cursor: pointer;
         }
+
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f9f9f9; /* Light gray background for input fields */
+            border: 2px solid #ccc; /* Slightly darker border */
+            border-radius: 5px; /* Rounded corners for input fields */
+            position: relative; /* Added position relative for positioning icon */
+        }
+
+        /* Styles for the password field container */
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-container input[type="password"] {
+            padding-right: 40px; /* Space for the eye icon */
+        }
+
+        .password-container .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px; /* Adjust the size of the eye icon */
+            background: none; /* Remove background */
+            border: none; /* Remove border */
+            padding: 0; /* Remove padding */
+        }
     </style>
+    
 </head>
 
 <body>
@@ -264,7 +300,10 @@
 <form id="signInForm" method="post">
     {% csrf_token %}
     <input type="text" name="name" placeholder="User Name">
-    <input type="password" name="password" placeholder="Password">
+    <div class="password-container">
+        <input type="password" name="password" id="password" placeholder="Password">
+        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+    </div>
     <input type="text" name="project" placeholder="Project">
 </form>
 </div>
@@ -292,15 +331,25 @@
     nextBtn.addEventListener('click', () => {
         container.classList.add("active");
     });
-    doneBtn.addEventListener('click', () => {
-        container.classList.remove("active");
-    });
+    // doneBtn.addEventListener('click', () => {
+    //     container.classList.remove("active");
+    // });
 
     doneBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Prevent the default form submission
         moreInfoForm.submit();
         signInForm.submit();
     });
+
+    function togglePassword() {
+            var passwordField = document.getElementById('password');
+            var passwordFieldType = passwordField.getAttribute('type');
+            if (passwordFieldType === 'password') {
+                passwordField.setAttribute('type', 'text');
+            } else {
+                passwordField.setAttribute('type', 'password');
+            }
+        }
 </script>
 </body>
 </html>
