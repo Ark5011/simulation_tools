@@ -10,7 +10,7 @@ def register(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('home:login')
         else:
             return render(request, 'home/fail.html')
     else:
@@ -33,20 +33,20 @@ def user_login(request):
             login(request, user)
             context = {'project': project, 'factory': factory, 'line': line, 'product': product, 'location': location}
             request.session['user_info'] = [context]
-            return redirect('home')
+            return redirect('home:homepage')
         else:
             messages.error(request, name + password)
-            return redirect('login')
+            return redirect('home:login')
     else:
         return render(request, 'home/login.html')
     
     
-def logout(request):
+def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('home:login')
 
 
 @login_required(login_url='login')
-def home(request):
+def homepage(request):
     return render(request, 'home/homev2.html')
 
