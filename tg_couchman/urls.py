@@ -6,4 +6,5 @@ app_name = 'tg_couchman'
 urlpatterns = [
     path('', views.tg_form, name='tg_form'),
     path('export/', views.exportFile, name='exportFile'),
+    path('pdf/', views.generate_pdf, name='generate_pdf'),
 ]

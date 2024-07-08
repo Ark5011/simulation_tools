@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tg Couchman</title>
 
-	<link href="https://bootswatch.com/5/sketchy/bootstrap.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/tg_couchman.css' %}">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light py-5">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light py-5" style="background-color: white; font-weight: bold;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home:home' %}">Simulation Tools</a>
+            <a class="navbar-brand" href="{% url 'home:homepage' %}">
+                <img src="{% static 'img/logo.png' %}" height="30">
+            </a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'tg_couchman:tg_form' %}">Tg Couchman</a>
@@ -21,7 +25,14 @@
             </ul>
         </div>
     </nav>
-	{% block content %}
-	{% endblock content %}
+
+
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

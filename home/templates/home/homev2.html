@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,71 +7,10 @@
 <title>Home</title>
 <!-- Bootstrap CSS -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-    * {
-        font-family: 'Montserrat', sans-serif;
-    }
-    body {
-        color: white;
-        padding-top: 70px;
-        background-color: #ffc9fd;
-        background: linear-gradient(to right, #fbb4df, #fe019a);
-    }
-    .navbar {
-        z-index: 1000;
-        background-color: white;
-        position: fixed;
-        width: 100%;
-        top: 0;
-    }
-
-    .navbar-collapse a {
-        color: black;
-        font-size: 20px;
-    }
-
-    .navbar-collapse a:hover {
-        color: #fe019a;
-    }
-
-    .card {
-        width: 18rem;
-        height: 20rem;
-        margin: 30px auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: white;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-    }
-    .card-title, .card-text {
-        color: black;
-        text-align: center;
-    }
-    .card-img {
-        height: 2in;
-        width: 2in;
-        object-fit: cover;
-        margin-bottom: 1rem;
-    }
-    .btn {
-        background-color: #fe019a;
-        color: white;
-        margin-top: auto;
-    }
+    
 </style>
 </head>
 <body>

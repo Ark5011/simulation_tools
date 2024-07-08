@@ -1,131 +1,148 @@
 {% extends 'tg_couchman/base.html' %}
-
 {% block content %}
 
-	<div class="row mt-5">
-		<div class="col-12 col-md-6 mx-md-auto">
-			<h1>Tg Couchman Results</h1>
-			
-			<div class="mt-5">
-				<form name="exportFile" action="export/" method="get">
-					<input type="submit" id="exportFile" name="exportFile" value="Export">
-					</form>
-			</div>
+<div class="row mt-5">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <h1>Tg Couchman Results</h1>
+        
+        <div class="mt-5">
+            <form name="exportFile" action="export/" method="get">
+                <input type="submit" id="exportFile" name="exportFile" value="Download Excel" class="btn btn-primary">
+            </form>
+        </div>
+		<div class="mt-5">
+            <form name="generate_pdf" action="pdf/" method="get">
+                <input type="submit" id="generate_pdf" name="generate_pdf" value="Download PDF" class="btn btn-primary">
+            </form>
+        </div>
 
-			<div class="mt-5">
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Tg Min</th>
-							<th scope="col">Tg Target</th>
-							<th scope="col">Tg Max</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{ tg_min }}</td>
-							<td>{{ tg_target }}</td>
-							<td>{{ tg_max }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			
-			
-			<div class="mt-5">
-				<h3>Min moisture</h3>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Ingredients</th>
-							<th scope="col">Tg (C)</th>
-							<th scope="col">Cp (J/g/C)</th>
-							<th scope="col">Formulation (%)</th>
-							<th scope="col">Wi</th>
-							<th scope="col">Cp * Wi</th>
-							<th scope="col">Cp * Wi * Tgi</th>
-							<th scope="col">Tg</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in zipped_min %}
-							<tr>
-								<th scope="row">{{ingredients}}</th>
-								<td>{{ tg_values}}</td>
-								<td>{{ cp_values }}</td>
-								<td>{{ f_values_min }}</td>
-								<td>{{ wi_values_min }}</td>
-								<td>{{ cpwi_values_min }}</td>
-								<td>{{ cpwitg_values_min }}</td>
-								<td>{{ final_tg_min_list }}</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table> 
-			</div>
-			<div class="mt-5">
-				<h3>Target moisture</h3>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Ingredients</th>
-							<th scope="col">Tg (C)</th>
-							<th scope="col">Cp (J/g/C)</th>
-							<th scope="col">Formulation (%)</th>
-							<th scope="col">Wi</th>
-							<th scope="col">Cp * Wi</th>
-							<th scope="col">Cp * Wi * Tgi</th>
-							<th scope="col">Tg</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list in zipped_target %}
-							<tr>
-								<th scope="row">{{ingredients}}</th>
-								<td>{{ tg_values }}</td>
-								<td>{{ cp_values }}</td>
-								<td>{{ f_values_target }}</td>
-								<td>{{ wi_values_target }}</td>
-								<td>{{ cpwi_values_target }}</td>
-								<td>{{ cpwitg_values_target }}</td>
-								<td>{{ final_tg_target_list }}</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table> 
-			</div>
-			<div class="mt-5">
-				<h3>Max moisture</h3>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Ingredients</th>
-							<th scope="col">Tg (C)</th>
-							<th scope="col">Cp (J/g/C)</th>
-							<th scope="col">Formulation (%)</th>
-							<th scope="col">Wi</th>
-							<th scope="col">Cp * Wi</th>
-							<th scope="col">Cp * Wi * Tgi</th>
-							<th scope="col">Tg</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list in zipped_max %}
-							<tr>
-								<th scope="row">{{ingredients}}</th>
-								<td>{{ tg_values }}</td>
-								<td>{{ cp_values }}</td>
-								<td>{{ f_values_max }}</td>
-								<td>{{ wi_values_max }}</td>
-								<td>{{ cpwi_values_max }}</td>
-								<td>{{ cpwitg_values_max }}</td>
-								<td> {{final_tg_max_list}} </td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table> 
-			</div>
-		</div>
-	</div>
+        {% if zipped_min or zipped_target or zipped_max %}
+            <div class="mt-5 table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Tg Min</th>
+                            <th scope="col">Tg Target</th>
+                            <th scope="col">Tg Max</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ tg_min }}</td>
+                            <td>{{ tg_target }}</td>
+                            <td>{{ tg_max }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-5">
+                <h3>Min moisture</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Ingredients</th>
+                                <th scope="col">Tg (C)</th>
+                                <th scope="col">Cp (J/g/C)</th>
+                                <th scope="col">Formulation (%)</th>
+                                <th scope="col">Wi</th>
+                                <th scope="col">Cp * Wi</th>
+                                <th scope="col">Cp * Wi * Tgi</th>
+                                <th scope="col">Tg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in zipped_min %}
+                                <tr>
+                                    <th scope="row">{{ ingredients }}</th>
+                                    <td>{{ tg_values }}</td>
+                                    <td>{{ cp_values }}</td>
+                                    <td>{{ f_values_min }}</td>
+                                    <td>{{ wi_values_min }}</td>
+                                    <td>{{ cpwi_values_min }}</td>
+                                    <td>{{ cpwitg_values_min }}</td>
+                                    <td>{{ final_tg_min_list }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <h3>Target moisture</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Ingredients</th>
+                                <th scope="col">Tg (C)</th>
+                                <th scope="col">Cp (J/g/C)</th>
+                                <th scope="col">Formulation (%)</th>
+                                <th scope="col">Wi</th>
+                                <th scope="col">Cp * Wi</th>
+                                <th scope="col">Cp * Wi * Tgi</th>
+                                <th scope="col">Tg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredients, tg_values, cp_values, f_values_target, wi_values_target, cpwi_values_target, cpwitg_values_target, final_tg_target_list in zipped_target %}
+                                <tr>
+                                    <th scope="row">{{ ingredients }}</th>
+                                    <td>{{ tg_values }}</td>
+                                    <td>{{ cp_values }}</td>
+                                    <td>{{ f_values_target }}</td>
+                                    <td>{{ wi_values_target }}</td>
+                                    <td>{{ cpwi_values_target }}</td>
+                                    <td>{{ cpwitg_values_target }}</td>
+                                    <td>{{ final_tg_target_list }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <h3>Max moisture</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Ingredients</th>
+                                <th scope="col">Tg (C)</th>
+                                <th scope="col">Cp (J/g/C)</th>
+                                <th scope="col">Formulation (%)</th>
+                                <th scope="col">Wi</th>
+                                <th scope="col">Cp * Wi</th>
+                                <th scope="col">Cp * Wi * Tgi</th>
+                                <th scope="col">Tg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list in zipped_max %}
+                                <tr>
+                                    <th scope="row">{{ ingredients }}</th>
+                                    <td>{{ tg_values }}</td>
+                                    <td>{{ cp_values }}</td>
+                                    <td>{{ f_values_max }}</td>
+                                    <td>{{ wi_values_max }}</td>
+                                    <td>{{ cpwi_values_max }}</td>
+                                    <td>{{ cpwitg_values_max }}</td>
+                                    <td>{{ final_tg_max_list }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="mt-5">
+                <p>No data available for display.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock content %}

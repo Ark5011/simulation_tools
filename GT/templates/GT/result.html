@@ -1,0 +1,101 @@
+{% extends 'tg_couchman/base.html' %}
+
+
+{% block content %}
+
+<div row="mt-5">
+    <div class="col-12 col-md-6 mx-md-auto">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        
+        <div id="myPlot"></div>
+        <script>
+            var exp = "-16.096*x + 92.853";
+
+            // Generate values
+            var xValues = [];
+            var yValues = [];
+            for (let x = 0; x <= 6; x += 1) {
+            yValues.push(eval(exp));
+            xValues.push(x);
+            };
+
+            // Define Data
+            var trace1 = {
+                x: [0, 1, 2, 3, 4, 5, 6],
+                y: {{graph_yvalues|safe}},
+                mode: "lines",
+            };
+
+            var trace2 = {
+                x: xValues,
+                y: yValues,
+                mode: "lines",
+                name: "y = -16.096x + 92.853"
+            };
+
+            var trace3 = {
+                x: [{{f_min|safe}}, {{f_target|safe}}, {{f_max|safe}}],
+                y: [{{tg_min|safe}}, {{tg_target|safe}}, {{tg_max|safe}}],
+                mode: "markers",
+                name: 'potato'
+            };
+
+            var trace4 = {
+                x: [{{f_min|safe}}, {{f_target|safe}}, {{f_max|safe}}],
+                y: [{{spraydry_min|safe}}, {{spraydry_target|safe}}, {{spraydry_max|safe}}],
+                mode: "markers",
+                name: 'Donald trump',
+                marker: {
+                    symbol: 'triangle-up',
+                    size: 12
+                }
+            };
+
+            var xAxisAt30 = {
+                type: 'line',
+                x0: 0,
+                x1: 1,
+                xref: 'paper',
+                y0: 30,
+                y1: 30,
+                line: {
+                    color: 'black',
+                    width: 1,
+                }
+            };
+
+            var data = [trace1, trace2, trace3, trace4];
+            const layout = {
+                title: "G&T Simulation",
+                yaxis: {
+                    range: [30, 120],
+                    title: "Onset Tg [°C]"
+                },
+                xaxis: {
+                    title: "Water content [%]"
+                },
+                shapes: [xAxisAt30],  // Add the horizontal line to the layout
+                annotations: [
+                    {
+                        x: 0,
+                        y: 30,
+                        xref: 'paper',
+                        yref: 'y',
+                        text: '',
+                        showarrow: false,
+                        font: {
+                            size: 12,
+                            color: 'black'
+                        },
+                        align: 'left'
+                    }
+                ]
+            };
+
+            // Display using Plotly
+            Plotly.newPlot("myPlot", data, layout);
+        </script>
+    </div>
+</div>
+{% endblock content %}
+
