@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -262,12 +263,13 @@
             border: none; /* Remove border */
             padding: 0; /* Remove padding */
         }
+
     </style>
     
 </head>
 
 <body>
-<a href="{% url 'register' %}" class="register-button">Register</a>
+<a href="{% url 'home:register' %}" class="register-button">Register</a>
 <div class="row mt-5">
     <div class="col-12 col-md-6 mx-md-auto">
         {% if messages %}
@@ -284,11 +286,11 @@
     <div class="form-container more-info">
         <form id="moreInfoForm" method="post">
             {% csrf_token %}
-            <input type="text" name="factory" placeholder="Factory">
-            <input type="text" name="line" placeholder="Line">
-            <input type="text" name="product" placeholder="Product">
+            <input type="text" name="factory" placeholder="Factory" required>
+            <input type="text" name="line" placeholder="Line" required>
+            <input type="text" name="product" placeholder="Product" required>
             <label for="location" class="form-label" style="font-size: 15px; margin-top: 10px;">Choose your location from the list:</label>
-                <select class="form-select form-select-lg" name="location">
+                <select class="form-select form-select-lg" name="location" required>
                     <option>Plant</option>
                     <option>Pilot Plant</option>
                 </select>
@@ -304,13 +306,14 @@
         <input type="password" name="password" id="password" placeholder="Password">
         <span class="toggle-password" onclick="togglePassword()">👁️</span>
     </div>
-    <input type="text" name="project" placeholder="Project">
+    <input type="text" name="project" placeholder="Project" required>
 </form>
 </div>
     <div class="toggle-container">
         <div class="toggle">
             <div class="toggle-panel toggle-left">
                 <h2>Enter the required details</h2>
+                <button class="hidden" id="back" type="button">Back</button>
             </div>
             <div class="toggle-panel toggle-right">
                 <h1>Hello, Friend!</h1>
@@ -325,15 +328,16 @@
     const container = document.getElementById('container');
     const nextBtn = document.getElementById('next');
     const doneBtn = document.getElementById('done');
+    const backBtn = document.getElementById('back');
     const moreInfoForm = document.getElementById('moreInfoForm');
     const signInForm = document.getElementById('signInForm');
 
     nextBtn.addEventListener('click', () => {
         container.classList.add("active");
     });
-    // doneBtn.addEventListener('click', () => {
-    //     container.classList.remove("active");
-    // });
+    backBtn.addEventListener('click', () => {
+        container.classList.remove("active");
+    });
 
     doneBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Prevent the default form submission

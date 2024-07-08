@@ -18,7 +18,7 @@ def tg_form(request):
             f_whey_protein = form.cleaned_data['whey_protein']
             f_GOS = form.cleaned_data['GOS']
             f_PDX = form.cleaned_data['PDX']
-            f_lactose = 50.9 - f_GOS - f_PDX
+            f_lactose = form.cleaned_data['lactose']
             
             f_sum_min = sum([f_water_min, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
             f_sum_target = sum([f_water_target, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])

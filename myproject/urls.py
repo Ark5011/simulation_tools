@@ -20,10 +20,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', views.register, name="register"),
-    path('login/', views.user_login, name="login"),
-    path('logout/', views.logout, name="logout"),
-    path('', views.home, name="home"),
+    path('', include('home.urls'), name="home"),
     path('tg_couchman/', include('tg_couchman.urls'), name="tg_couchman"),
     path('GT/', include('GT.urls'), name="GT"),
 ]

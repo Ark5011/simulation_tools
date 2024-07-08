@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tg_couchman',
     'GT',
+    'home',
     'import_export',
 ]
 

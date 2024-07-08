@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Register
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        body {
+            background-color: #ffc9fd;
+            background: linear-gradient(to right, #fbb4df, #ff76c8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: #fe019a;
+            color: #fff;
+            font-size: 12px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+		
+		input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f9f9f9; /* Light gray background for input fields */
+            border: 2px solid #ccc; /* Slightly darker border */
+            border-radius: 5px; /* Rounded corners for input fields */
+            position: relative; /* Added position relative for positioning icon */
+        }
+    </style>
+</head>
+<body>
+    <div class="row mt-5">
+		<div class="col-12 col-md-6 mx-md-auto">
+			<h1>Register</h1>
+			<form method="POST">
+				{% csrf_token %}
+				{{ registerform.as_p }}
+
+				<button class="btn btn-primary" type="submit">Submit</button>
+			</form>
+		</div>
+</body>
+</html>
