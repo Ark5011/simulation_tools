@@ -3,7 +3,7 @@ from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from django.http import HttpResponse
 
 def register(request):
     if request.method == "POST":
@@ -23,16 +23,9 @@ def user_login(request):
     if request.method == "POST":
         name = request.POST.get('name')
         password = request.POST.get('password')
-        project = request.POST.get('project')
-        factory = request.POST.get('factory')
-        line = request.POST.get('line')
-        product = request.POST.get('product')
-        location = request.POST.get('location')
         user = authenticate(request, username=name, password=password)
         if user is not None:
             login(request, user)
-            context = {'project': project, 'factory': factory, 'line': line, 'product': product, 'location': location}
-            request.session['user_info'] = [context]
             return redirect('home:homepage')
         else:
             messages.error(request, name + password)
@@ -45,6 +38,18 @@ def logout_view(request):
     logout(request)
     return redirect('home:login')
 
+def update_session_variable(request):
+    if request.method == 'POST':
+        new_value = request.POST.get('new_value')
+        if new_value:
+            new_value = list(new_value.split(','))
+            context = {'project': new_value[0], 'factory': new_value[1], 'line': new_value[2], 'product': new_value[3], 'location': new_value[4]}
+            request.session['user_info'] = context
+            return HttpResponse({'status': 'success'})
+        else:
+            return HttpResponse({'status': 'error', 'message': 'No value provided'})
+
+    return HttpResponse({'status': 'error', 'message': 'Invalid request method'})
 
 @login_required(login_url='home:login')
 def homepage(request):

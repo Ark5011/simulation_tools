@@ -1,13 +1,16 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import pandas as pd
 from .forms import TgForm
 from .models import Tg, Cp
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
 from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
 # Create your views here.
+@login_required(login_url='home:login')
 def tg_form(request):
     if request.method == "POST":
         form = TgForm(request.POST)
@@ -150,7 +153,8 @@ def tg_form(request):
     else:
         form = TgForm()
         return render(request, 'tg_couchman/index.html', {'form': form})
-    
+
+@login_required(login_url='home:login')    
 def exportFile(request):
     tg_data = request.session['tg_data']
     
@@ -186,9 +190,10 @@ def exportFile(request):
     
     return resp
 
-
+@login_required(login_url='home:login')
 def generate_pdf(request):
-    # Get the session data
+    
+    user_info = request.session['user_info']
     tg_data = request.session.get('tg_data_rounded')
     
     # Create a response object
@@ -199,11 +204,15 @@ def generate_pdf(request):
     doc = SimpleDocTemplate(response, pagesize=letter)
     elements = []
     
-    # Table headers
-    headers = ["Ingredients", "Tg (C)", "Cp (J/g/C)", "Formulation (%)", "Wi", "Cp * Wi", "Cp * Wi * Tg", "Tg"]
+    styles = getSampleStyleSheet()
+    title = Paragraph("Tg Couchman", styles['Heading1'])
+    elements.append(title)
+    elements.append(Spacer(1, 12))
 
     # Function to create a table from the data
     def create_table(data, title):
+        # Table headers
+        headers = ["Ingredients", "Tg (C)", "Cp (J/g/C)", "Formulation (%)", "Wi", "Cp * Wi", "Cp * Wi * Tg", "Tg"]
         table_data = [headers]
         table_data.extend(data)
         table = Table(table_data)
@@ -216,17 +225,24 @@ def generate_pdf(request):
             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
             ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ]))
+        elements.append(Paragraph(title, styles['Heading2']))
         elements.append(table)
         elements.append(Spacer(1, 12))
     
-    # Add tables for min, target, and max moisture
+    # Add tables for min, target, and max moisture with labels
     create_table(tg_data['zipped_min'], "Min moisture")
     create_table(tg_data['zipped_target'], "Target moisture")
     create_table(tg_data['zipped_max'], "Max moisture")
+    
+    elements.append(Spacer(1, 24))
+    elements.append(Paragraph("User Information:", styles['Heading2']))
+    elements.append(Paragraph(f"Project: {user_info['project']}", styles['Normal']))
+    elements.append(Paragraph(f"Factory: {user_info['factory']}", styles['Normal']))
+    elements.append(Paragraph(f"Line: {user_info['line']}", styles['Normal']))
+    elements.append(Paragraph(f"Product: {user_info['product']}", styles['Normal']))
+    elements.append(Paragraph(f"Location: {user_info['location']}", styles['Normal']))
     
     # Build the document
     doc.build(elements)
     
     return response
-
-            
