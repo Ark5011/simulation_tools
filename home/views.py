@@ -29,7 +29,7 @@ def user_login(request):
             login(request, user)
             return redirect('home:homepage')
         else:
-            messages.error(request, name + password)
+            messages.error(request, "Invalid username or password")
             return redirect('home:login')
     else:
         return render(request, 'home/login.html')
@@ -56,3 +56,6 @@ def update_session_variable(request):
 def homepage(request):
     return render(request, 'home/homev2.html')
 
+@login_required(login_url='home:login')
+def archive(request):
+    return render(request, 'home/archive.html')

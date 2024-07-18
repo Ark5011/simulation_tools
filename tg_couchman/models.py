@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Tg(models.Model):
     water = models.FloatField()
@@ -10,11 +11,6 @@ class Tg(models.Model):
 
     # def __str__(self):
     #     return self.title
-
-class Final_Tg(models.Model):
-    final_tg_min = models.FloatField()
-    final_tg_target = models.FloatField()
-    final_tg_max = models.FloatField()
 
 class Cp(models.Model):
     water = models.FloatField()
@@ -32,7 +28,12 @@ class Formulation(models.Model):
     GOS = models.FloatField()
     PDX = models.FloatField()
     
-    # @property
-    # def lactose(self):
-    #     lactose = 50.9 - self.GOS + self.PDX
-    #     return lactose
+class Final_Couchman(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.CharField(max_length=100)
+    water_min = models.FloatField()
+    casein = models.FloatField()
+    whey_protein = models.FloatField()
+    lactose = models.FloatField()
+    GOS = models.FloatField()
+    PDX = models.FloatField()
