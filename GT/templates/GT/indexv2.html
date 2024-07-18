@@ -22,7 +22,7 @@
             // Define Data
             var trace1 = {
                 x: [0, 1, 2, 3, 4, 5, 6],
-                y: {{graph_yvalues|safe}},
+                y: graph_yvalues,
                 mode: "lines",
                 name: "Sticky Curve",
             };
@@ -43,7 +43,7 @@
 
             var trace4 = {
                 x: [{{f_min|safe}}, {{f_target|safe}}, {{f_max|safe}}],
-                y: [{{spraydry_min|safe}}, {{spraydry_target|safe}}, {{spraydry_max|safe}}],
+                y: [spraydry_min, spraydry_target, spraydry_max],
                 mode: "markers",
                 name: 'Exhaust Temp',
                 marker: {
@@ -75,22 +75,6 @@
                 xaxis: {
                     title: "Water content [%]"
                 },
-                shapes: [xAxisAt30],  // Add the horizontal line to the layout
-                annotations: [
-                    {
-                        x: 0,
-                        y: 30,
-                        xref: 'paper',
-                        yref: 'y',
-                        text: '',
-                        showarrow: false,
-                        font: {
-                            size: 12,
-                            color: 'black'
-                        },
-                        align: 'left'
-                    }
-                ]
             };
 
             // Display using Plotly
@@ -98,6 +82,8 @@
         </script>
     </div>
     <div class="col-12 col-md-8 mx-md-auto">
+    <form method="POST">
+        {% csrf_token %}
     <div class="table-responsive mt-5">
         <h3>Gordon-Taylor</h3>
         <table class="table table-hover table-bordered">
@@ -126,57 +112,65 @@
             <tbody>
                 <tr>
                     <th scope="row">Min moisture</th>
-                    <td>{{ aw_min }}</td>
+                    <td><input type="number" step="0.001" name="aw_min" id="aw_min" value=0 required></td>
                     <td>{{ f_min }}</td>
                     <td>{{ f_min }}</td>
                     <td>{{ tg_min }}</td>
                     <td>{{ tg_gt_min }}</td>
-                    <td>{{ spraydry_min }}</td>
-                    <td>{{ sfb_min }}</td>
+                    <td><input type="number" step="0.001" name="spraydry_min" id="spraydry_min" value=0 required></td>
+                    <td><input type="number" step="0.001" name="sfb_min" id="sfb_min" value=0 required></td>
                 </tr>
                 <tr>
                     <th scope="row">Target moisture</th>
-                    <td>{{ aw_target }}</td>
+                    <td><input type="number" step="0.001" name="aw_target" id="aw_target" value=0 required></td>
                     <td>{{ f_target }}</td>
                     <td>{{ f_target }}</td>
                     <td>{{ tg_target }}</td>
                     <td>{{ tg_gt_target }}</td>
-                    <td>{{ spraydry_target }}</td>
-                    <td>{{ sfb_target }}</td>
+                    <td><input type="number" step="0.001" name="spraydry_target" id="spraydry_target" value=0 required></td>
+                    <td><input type="number" step="0.001" name="sfb_target" id="sfb_target" value=0 required></td>
                 </tr>
                 <tr>
                     <th scope="row">Max moisture</th>
-                    <td>{{ aw_max }}</td>
+                    <td><input type="number" step="0.001" name="aw_max" id="aw_max" value=0 required></td>
                     <td>{{ f_max }}</td>
                     <td>{{ f_max }}</td>
                     <td>{{ tg_max }}</td>
                     <td>{{ tg_gt_max }}</td>
-                    <td>{{ spraydry_max }}</td>
-                    <td>{{ sfb_max }}</td>
+                    <td><input type="number" step="0.001" name="spraydry_max" id="spraydry_max" value=0 required></td>
+                    <td><input type="number" step="0.001" name="sfb_max" id="sfb_max" value=0 required></td>
                 </tr>
                 <tr>
                     <th scope="row">Actual (after sifter)</th>
-                    <td>{{ aw_actual }}</td>
-                    <td>{{ w_actual }}</td>
-                    <td>{{ w_actual }}</td>
-                    <td>{{ tg_actual }}</td>
+                    <td><input type="number" step="0.001" name="aw_actual" id="aw_actual" value=0 required></td>
+                    <td><input type="number" step="0.001" name="w_actual" id="w_actual" value=0 required></td>
+                    <td>{{ tg_gt_actual }}</td>
+                    <td><input type="number" step="0.001" name="tg_actual" id="tg_actual" value=0 required></td>
                     <td>{{ tg_gt_actual }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <th scope="row">Actual (after sifter sample)</th>
-                    <td>{{ aw_sample }}</td>
-                    <td>{{ w_sample }}</td>
-                    <td>{{ w_sample }}</td>
-                    <td>{{ tg_sample }}</td>
+                    <td><input type="number" step="0.001" name="aw_sample" id="aw_sample" value=0 required></td>
+                    <td><input type="number" step="0.001" name="w_sample" id="w_sample" value=0 required></td>
+                    <td>{{ tg_gt_sample }}</td>
+                    <td><input type="number" step="0.001" name="tg_sample" id="tg_sample" value=0 required></td>
                     <td>{{ tg_gt_sample }}</td>
                     <td></td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
+        <input type="number" step="0.001" name="k" id="tg_k" placeholder="k" required>
+        <input type="number" step="0.001" name="tg_dry" id="tg_dry" placeholder="tg dry" required>
+        <button class="btn btn-primary" type="submit">Calculate</button>
     </div>
+    </form>
 </div>
+<script>
+    Vue.createApp()
+</script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 {% endblock content %}
 

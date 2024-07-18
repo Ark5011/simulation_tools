@@ -236,6 +236,7 @@ def generate_pdf(request):
     
     elements.append(Spacer(1, 24))
     elements.append(Paragraph("User Information:", styles['Heading2']))
+    elements.append(Paragraph(f"Name: {request.user.username}", styles['Normal']))
     elements.append(Paragraph(f"Project: {user_info['project']}", styles['Normal']))
     elements.append(Paragraph(f"Factory: {user_info['factory']}", styles['Normal']))
     elements.append(Paragraph(f"Line: {user_info['line']}", styles['Normal']))

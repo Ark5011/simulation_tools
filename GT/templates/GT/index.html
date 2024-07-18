@@ -1,17 +1,82 @@
 {% extends 'tg_couchman/base.html' %}
 
-
 {% block content %}
-	<div class="row mt-5">
-		<div class="col-12 col-md-6 mx-md-auto">
-			<h1>G&T Calculator</h1>
-			<h2>Inputs:</h2>
-			<form method="POST">
-				{% csrf_token %}
-				{{ form.as_p }}
-
-				<button class="btn btn-primary" type="submit">Calculate</button>
-			</form>
-		</div>
-	</div>
+<div class="row mt-5">
+    <div class="col-12 col-md-8 mx-md-auto">
+        <h1>G&T Calculator</h1>
+        <h2>Inputs:</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+						<th scope="col"></th>
+                        <th scope="col">a<sub>w</sub> @25°C</th>
+                        <th scope="col">W% [%wb]</th>
+                        <th scope="col">Tg</th>
+						<th scope="col">Spray Drying Exhaust Temp Target</th>
+						<th scope="col">SFB Upper Layer Powder Temp (Actual)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Min Moisture</th>
+                        <td>{{ form.aw_min }}</td>
+                        <td></td>
+                        <td></td>
+						<td>{{ form.spraydry_min }}</td>
+						<td>{{ form.sfb_min }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Target Moisture</th>
+                        <td>{{ form.aw_target }}</td>
+                        <td></td>
+                        <td></td>
+						<td>{{ form.spraydry_target }}</td>
+						<td>{{ form.sfb_target }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Max Moisture</th>
+                        <td>{{ form.aw_max }}</td>
+                        <td></td>
+                        <td></td>
+						<td>{{ form.spraydry_max }}</td>
+						<td>{{ form.sfb_max }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Actual (after sifter)</th>
+                        <td>{{ form.aw_actual }}</td>
+                        <td>{{ form.w_actual }}</td>
+                        <td>{{ form.tg_actual }}</td>
+						<td></td>
+						<td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Actual (after sifter sample)</th>
+                        <td>{{ form.aw_sample }}</td>
+                        <td>{{ form.w_sample }}</td>
+                        <td>{{ form.tg_sample }}</td>
+						<td></td>
+						<td></td>
+                    </tr>
+                </tbody>
+            </table>
+			<table class="table table-bordered">
+                <thead>
+                    <tr>
+						<th scope="col">Tg Dry</th>
+                        <th scope="col">K</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr>
+                        <td>{{ form.tg_dry }}</td>
+                        <td>{{ form.k }}</td>
+                    </tr>
+                </tbody>
+			</table>
+            <button class="btn btn-primary" type="submit">Calculate</button>
+        </form>
+    </div>
+</div>
 {% endblock content %}

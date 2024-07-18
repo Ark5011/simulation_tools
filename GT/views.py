@@ -97,5 +97,6 @@ def gt_form(request):
     form = Gtform()
     return render(request, 'GT/index.html', {'form': form})
 
+
 def exportFile(request):
     pass

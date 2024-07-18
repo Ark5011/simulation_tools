@@ -12,7 +12,8 @@ def register(request):
             form.save()
             return redirect('home:login')
         else:
-            return render(request, 'home/fail.html')
+            messages.info(request, 'Registration Failed!')
+            return redirect('home:register')
     else:
         form = CreateUserForm()
         context = {'registerform': form}
