@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Solids</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+        }
+
+        body {
+            color: black; /* Changed text color to black for better visibility */
+            padding-top: 70px;
+            background-color: #ffc9fd;
+        }
+
+        h3 {
+            color: black; /* Changed heading color to black for better visibility */
+            text-align: center;
+        }
+
+        .navbar {
+            z-index: 1000;
+            background-color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+
+        .navbar-collapse a {
+            color: black;
+            font-size: 20px;
+        }
+
+        .navbar-collapse a:hover {
+            color: #fe019a;
+        }
+
+        .table-container table {
+            text-align: left;
+            table-layout: fixed;
+        }
+
+        .custom-table {
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 95%;
+            margin: 30px auto;
+            border-collapse: collapse;
+        }
+
+        .custom-table td,
+        .custom-table th {
+            border-color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        /* Adjusting column widths */
+        .custom-table td:nth-child(1) {
+            width: 30%; /* Adjust as needed */
+        }
+
+        .custom-table td:nth-child(2),
+        .custom-table td:nth-child(3) {
+            width: 35%; /* Adjust as needed */
+        }
+
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: white; font-weight: bold;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../../static/img/logo.png" height="30">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5002/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Archive</a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center my-4 display-3" style="font-weight: bold; color: white;">Total Solids</h1>
+    </div>
+
+    <div class="container content-container">
+        <div class="container col-8 align-middle">
+            <div class="form-group mt-4">
+                <label for="fat_content">Fat Content:</label>
+                <input type="number" step="any" class="form-control" id="fat_content" name="fat_content" required>
+            </div>
+            <div class="form-group">
+                <label for="density">Density, kg/m3:</label>
+                <input type="number" step="any" class="form-control" id="density" name="density" required>
+            </div>
+            <div class="text-center my-4">
+                <button type="button" class="btn btn-light" id="calculateTSButton">Calculate TS</button>
+                <!-- <button type="button" class="btn btn-light" id="generateexcelButton" style="display: none;">Generate Excel Sheet</button> -->
+            </div>
+            <div class="table-container">
+                <table class="table table-bordered custom-table">
+                    <thead>
+                        <tr>
+                            <th>Density, kg/m3</th>
+                            <th>Total Solids %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Results will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#calculateTSButton').click(function() {
+                var formData = {
+                    fat_content: $('#fat_content').val(),
+                    density: parseInt($('#density').val()) // Parse density as integer
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/totalsolids',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        console.log('Success:', response); // Log the response for debugging
+
+                        var resultsBody = $('#resultsBody');
+                        resultsBody.empty(); // Clear previous results
+
+                        // Populate table with new results
+                        var total_solids = response.total_solids;
+
+                        for (var i = 0; i <= 60; i++) {
+                            var current_density = formData.density + i;
+                            var total_solids_calc = total_solids[i];
+
+                            if (typeof total_solids_calc === 'number') {
+                                // Display density as integer and total_solids as float
+                                resultsBody.append('<tr><td>' + current_density + '</td><td>' + parseFloat(total_solids_calc).toFixed(2) + '</td></tr>');
+                            } else {
+                                console.log('Invalid value:', total_solids_calc);
+                                // Handle non-numeric or unexpected values
+                            }
+                        }
+
+                        // Show the generate excel button after calculation
+                        $('#generateexcelButton').show();
+                    },
+                    error: function(error) {
+                        console.log('Error:', error); // Log any errors for debugging
+                        alert('An error occurred. Please try again.'); // Display an error message to the user
+                    }
+                });
+
+                document.getElementById("generateexcelButton").addEventListener("click", function(event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    fetch('/generate_excel', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'ts.xlsx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
