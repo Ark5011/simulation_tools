@@ -141,6 +141,7 @@
     <div class="text-center my-4" id="formulachartButtonContainer" style="display: none;">
         <button type="submit" class="btn btn-light" id="formulachartButton">Show Formula Chart</button>
         <button type="submit" class="btn btn-light" id="generateexcelButton">Generate Excel Sheet</button>
+        <button type="submit" class="btn btn-light" id="generatePDFButton">Generate PDF Sheet</button>
     </div>
 
     <!-- Modal -->
@@ -404,8 +405,6 @@
             .catch(error => console.error('Error:', error));
         });
 
-
-
         form.addEventListener("submit", function(event) {
             event.preventDefault();
 
@@ -456,6 +455,14 @@
             })
             .catch(error => console.error('Error:', error));
         });
+
+        document.getElementById('generatePDFButton').addEventListener('click', function() {
+            triggerPrint();
+        });
+
+        function triggerPrint() {
+            window.print();
+        }
     });
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -805,31 +812,31 @@
         }
 
         // Function to handle the "Show Formula Chart" button click
-        document.getElementById("formulachartButton").addEventListener("click", function() {
-            // Fetch the form data
-            const formData = new FormData(form);
+    document.getElementById("formulachartButton").addEventListener("click", function() {
+        // Fetch the form data
+        const formData = new FormData(form);
 
-            // Send a POST request to the server
-            fetch('/mass_balance_tool', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle errors
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
+        // Send a POST request to the server
+        fetch('/mass_balance_tool', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle errors
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
 
-                // Update the formula chart modal with the calculated values
-                updateFormulaChart(data);
+            // Update the formula chart modal with the calculated values
+            updateFormulaChart(data);
 
-                // Show the formula chart modal
-                $('#formulaChartModal').modal('show');
-            })
-            .catch(error => console.error('Error:', error));
-        });
+            // Show the formula chart modal
+            $('#formulaChartModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+    });
 
     });
 
