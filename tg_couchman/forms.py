@@ -5,6 +5,6 @@ class TgForm(forms.ModelForm):
 
     class Meta:
         model = Formulation
-        fields = '__all__'
+        fields = ['water_min', 'casein', 'whey_protein', 'lactose', 'GOS', 'PDX'] 
 
     

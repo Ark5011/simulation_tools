@@ -21,15 +21,7 @@ class Cp(models.Model):
     PDX = models.FloatField()
     
 class Formulation(models.Model):
-    water_min = models.FloatField()
-    casein = models.FloatField()
-    whey_protein = models.FloatField()
-    lactose = models.FloatField()
-    GOS = models.FloatField()
-    PDX = models.FloatField()
-    
-class Final_Couchman(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.CharField(max_length=100)
     water_min = models.FloatField()
     casein = models.FloatField()
@@ -37,3 +29,4 @@ class Final_Couchman(models.Model):
     lactose = models.FloatField()
     GOS = models.FloatField()
     PDX = models.FloatField()
+    

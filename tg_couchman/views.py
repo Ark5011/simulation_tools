@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import pandas as pd
 from .forms import TgForm
-from .models import Tg, Cp
+from .models import Tg, Cp, Formulation
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
 from reportlab.lib import colors
@@ -25,6 +25,23 @@ def tg_form(request):
             f_GOS = form.cleaned_data['GOS']
             f_PDX = form.cleaned_data['PDX']
             f_lactose = form.cleaned_data['lactose']
+            
+            # user_info = request.session['user_info']
+            # obj, created = Formulation.objects.update_or_create(
+            #     user=request.user.username,
+            #     project=user_info['project'],
+            #     defaults=form,
+            #     create_defaults=form,
+            # )
+            
+            # if Formulation.objects.filter(user=request.user.username, project=user_info['project']) == 0:
+            #     record = form.save(commit=False)
+            #     record.user = request.user.username
+            #     record.project = user_info['project']
+            #     record.save()
+            # else:
+            #     Formulation.objects.get(user=request.user.username, project=user_info['project']).update(water_min=f_water_min, casein=f_casein, whey_protein=f_whey_protein, GOS=f_GOS, PDX=f_PDX, lactose=f_lactose)
+                
             
             f_sum_min = sum([f_water_min, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
             f_sum_target = sum([f_water_target, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
