@@ -1,0 +1,355 @@
+v<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nozzle</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        *{
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+        }
+
+        body {
+            color: white;
+            padding-top: 70px;
+            background-color: #ffc9fd;
+        }
+
+        h3 {
+            color: white;
+            text-align: center;
+        }
+
+        .navbar {
+            z-index: 1000;
+            background-color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+
+        .navbar-collapse a {
+            color: black;
+            font-size: 20px;
+        }
+
+        .navbar-collapse a:hover {
+            color: #fe019a;
+        }
+
+        .table-container table {
+            text-align: left;
+            table-layout: fixed;
+        }
+
+        .custom-table {
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 95%;
+            margin: 30px auto;
+            border-collapse: collapse;
+        }
+
+        .custom-table td,
+        .custom-table th {
+            border-color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        .form-select-lg {
+            width: 100%;
+            height: 7%;
+            margin-top: 7px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-select-lg option {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: white; font-weight: bold;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../../static/img/logo.png" height="30">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5002/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Archive</a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center my-4 display-3" style="font-weight: bold; color: white;">Nozzle</h1>
+        <h3>Applicable to Tuas Spray Dryer and Tatura MSD 2 Dryer</h3>
+    </div>
+
+    <div class="container content-container">
+        <form id="nozzleForm">
+            <div class="container col-8 align-middle">
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td class="col-5"></td>
+                                <td class="col-2">TD</td>
+                                <td></td>
+                                <td class="col-2">TDL</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Number of Nozzles</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="td_num_nozzles">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="tdl_num_nozzles">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Swirl Number</td>
+                                <td>
+                                    <select name="td_swirlNumber" class="form-select form-select-lg" style="height:40px;">
+                                        <option value="SW1">SW1</option>
+                                        <option value="SW2">SW2</option>
+                                        <option value="SW3">SW3</option>
+                                        <option value="SW4">SW4</option>
+                                        <option value="SW5">SW5</option>
+                                        <option value="SW6">SW6</option>
+                                        <option value="SW7">SW7</option>
+                                        <option value="SW8">SW8</option>
+                                        <option value="SW9">SW9</option>
+                                        <option value="SW10">SW10</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <select name="tdl_swirlNumber" class="form-select form-select-lg" style="height:40px;">
+                                        <option value="SWL1">SWL1</option>
+                                        <option value="SWL2">SWL2</option>
+                                        <option value="SWL3">SWL3</option>
+                                        <option value="SWL4">SWL4</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Orifice Number</td>
+                                <td>
+                                    <select id="td_orificeNumber" name="td_orificeNumber" class="form-select form-select-lg" style="height:40px;"></select>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <select id="tdl_orificeNumber" name="tdl_orificeNumber" class="form-select form-select-lg" style="height:40px;"></select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Operating Pressure</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="td_operating_pressure">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">bar</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="tdl_operating_pressure">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">bar</td>
+                            </tr>
+                            <tr>
+                                <td>Liquid Specific Gravity</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" step="any" name="td_lsg">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" step="any" name="tdl_lsg">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Liquid Flow Rate</td>
+                                <td class="display-element" data-field="td_liquid_flow_rate">{{ td_liquid_flow_rate }}</td>
+                                <td style="text-align: left;">l/h</td>
+                                <td class="display-element" data-field="tdl_liquid_flow_rate">{{ tdl_liquid_flow_rate }}</td>
+                                <td style="text-align: left;">l/h</td>
+                            </tr>
+                            <tr>
+                                <td>Spray Angle at 69 bar</td>
+                                <td class="display-element" data-field="td_spray_angle">{{ td_spray_angle }}</td>
+                                <td style="text-align: left;">degrees</td>
+                                <td>
+                                    <input type="text" class="form-control input-field" name="tdl_sprayAngle">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">degrees</td>
+                            </tr>
+                            <tr>
+                                <td>Droplet Size</td>
+                                <td class="display-element" data-field="td_droplet_size">{{ td_droplet_size }}</td>
+                                <td style="text-align: left;">microns</td>
+
+                            </tr>
+                            <tr>
+                                <td>Liquid Per Cent Solids</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="td_lpcs">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">%</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="tdl_lpcs">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">%</td>
+                            </tr>
+                            <tr>
+                                <td>Powder Per Cent Moisture</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" step="any" name="td_ppcm">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">%</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" step="any" name="tdl_ppcm">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td style="text-align: left;">%</td>
+                            </tr>
+                            <tr>
+                                <td>Powder Flow Rate</td>
+                                <td class="display-element" data-field="td_powder_flow_rate">{{ td_powder_flow_rate }}</td>
+                                <td style="text-align: left;">kg/h</td>
+                                <td class="display-element" data-field="tdl_powder_flow_rate">{{ tdl_powder_flow_rate }}</td>
+                                <td style="text-align: left;">kg/h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center my-4">
+                    <button type="button" class="btn btn-light" id="calculateTdButton">Calculate TD</button>
+                    <button type="button" class="btn btn-light" id="calculateTdlButton">Calculate TDL</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var selectTd = document.getElementById('td_orificeNumber');
+            var tdOrificeNum = [34, 37, 40, 43, 46, 49, 52, 55, 58, 61, 62, 64, 66, 67, 68, 70, 73, 75, 76, 80, 82, 85, 86, 88, 90, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118, 121, 127, 133, 136, 142, 145, 148, 151, 154, 157];
+
+            tdOrificeNum.forEach(function(value) {
+                var option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                selectTd.appendChild(option);
+            });
+
+            var selectTdl = document.getElementById('tdl_orificeNumber');
+            var tdlOrificeNum = [18, 20, 22, 24, 27, 30, 33, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58];
+
+            tdlOrificeNum.forEach(function(value) {
+                var option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                selectTdl.appendChild(option);
+            });
+
+            var form = document.getElementById('nozzleForm');
+            var calculateTdButton = document.getElementById('calculateTdButton');
+            var calculateTdlButton = document.getElementById('calculateTdlButton');
+
+            calculateTdButton.addEventListener('click', function() {
+                var formData = new FormData(form);
+                var formDataJson = {};
+
+                // Filter out TDL form fields from formData
+                for (var pair of formData.entries()) {
+                    if (!pair[0].startsWith('tdl_')) {
+                        formDataJson[pair[0]] = pair[1];
+                    }
+                }
+
+                console.log('TD Form Data:', formDataJson); // Debugging: Log form data to console
+
+                fetch('/td', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formDataJson)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('TD Response Data:', data); // Debugging: Log response data to console
+
+                    document.querySelector('[data-field="td_liquid_flow_rate"]').textContent = data.td_liquid_flow_rate;
+                    document.querySelector('[data-field="td_spray_angle"]').textContent = data.td_spray_angle;
+                    document.querySelector('[data-field="td_droplet_size"]').textContent = data.td_droplet_size;
+                    document.querySelector('[data-field="td_powder_flow_rate"]').textContent = data.td_powder_flow_rate;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            calculateTdlButton.addEventListener('click', function() {
+                var formData = new FormData(form);
+                var formDataJson = {};
+
+                // Filter out TD form fields from formData
+                for (var pair of formData.entries()) {
+                    if (!pair[0].startsWith('td_')) {
+                        formDataJson[pair[0]] = pair[1];
+                    }
+                }
+
+                console.log('TDL Form Data:', formDataJson); // Debugging: Log form data to console
+
+                fetch('/tdl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formDataJson)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('TDL Response Data:', data); // Debugging: Log response data to console
+
+                    document.querySelector('[data-field="tdl_liquid_flow_rate"]').textContent = data.tdl_liquid_flow_rate;
+                    document.querySelector('[data-field="tdl_powder_flow_rate"]').textContent = data.tdl_powder_flow_rate;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>

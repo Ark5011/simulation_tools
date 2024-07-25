@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'tg_couchman',
     'GT',
     'home',
+    'nozzle',
+    'mass_balance',
     'import_export',
 ]
 

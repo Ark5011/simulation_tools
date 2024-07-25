@@ -1,0 +1,709 @@
+{% extends 'mass_balance/base.html' %}
+{% block content %}
+
+    <div class="container">
+        <h1 class="text-center my-4 display-3" style="font-weight: bold; color: white;">Mass Balance Overview</h1>
+    </div>
+    <!-- style="display: none;" -->
+
+    <div class="text-center my-4" id="formulachartButtonContainer" style="display: none;">
+        <button type="submit" class="btn btn-light" id="formulachartButton">Show Formula Chart</button>
+        <button type="submit" class="btn btn-light" id="generateexcelButton">Generate Excel Sheet</button>
+        <button type="submit" class="btn btn-light" id="generatePDFButton">Generate PDF Sheet</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="formulaChartModal" tabindex="-1" aria-labelledby="formulaChartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="formulaChartModalLabel" style="color: black">Formula Chart</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <!-- Formula chart content will be dynamically populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container content-container">
+        <form id="massBalanceForm" action="/mass_balance_tool" method="POST">
+            {% csrf_token %}
+            <div class="container col-8 align-middle">
+                <h3>Humidities</h3>
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td class="col-6">Primary Air AH</td>
+                                <td>
+                                    <input type="number" step="any" class="form-control input-field" name="primaryairAH">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>g/kg</td>
+                            </tr>
+                            <tr>
+                                <td>SFB Inlet AH</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="sfbinletAH">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>g/kg</td>
+                            </tr>
+                            <tr>
+                                <td>SFB Inlet RH</td>
+                                <td class="display-element" data-field="sfb_inlet_rh">{{ sfb_inlet_rh }}</td>
+                                <td>%</td>
+                            </tr>
+                            <tr>
+                                <td>Outlet Air AH</td>
+                                <td class="display-element" data-field="outlet_air_ah">{{ outlet_air_ah }}</td>
+                                <td>g/kg</td>
+                            </tr>
+                            <tr>
+                                <td>Outlet Air RH</td>
+                                <td class="display-element" data-field="outlet_air_rh">{{ outlet_air_rh }}</td>
+                                <td>%</td>
+                            </tr>
+                            <tr>
+                                <td>Dummy Outlet Air RH</td>
+                                <td class="display-element" data-field="dummy_outlet_air_rh">{{ dummy_outlet_air_rh }}</td>
+                                <td>g/kg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Temperatures</h3>
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td>Primary Inlet T</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="primaryinletT">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td>SFB Inlet T</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="sfbinletT">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td>Roof Cooling T</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="roofcoolingT">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td>Outlet Air T</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="outletairT">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td>Dummy Outlet Air T</td>
+                                <td class="display-element" data-field="dummy_outlet_air_t">{{ dummy_outlet_air_t }}</td>
+                                <td>°C</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Airflows</h3>
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td>Primary Air</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="primaryair">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>kg/h</td>
+                            </tr>
+                            <tr>
+                                <td>SFB Air</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="sfbair">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>kg/h</td>
+                            </tr>
+                            <tr>
+                                <td>Roof Cooling Air</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="roofcoolingair">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>kg/h</td>
+                            </tr>
+                            <tr>
+                                <td>Altitude</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="altitude">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>m</td>
+                            </tr>
+                            <tr>
+                                <td>Barometric Pressure</td>
+                                <td class="display-element" data-field="barometric_pressure">{{ barometric_pressure }}</td>
+                                <td>kPa</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Concentrate</h3>
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td>Total Solids</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="totalsolids">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>%</td>
+                            </tr>
+                            <tr>
+                                <td>Temperature</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="temperature">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Powder</h3>
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td>Moisture (target)</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="moisture">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>%</td>
+                            </tr>
+                            <tr>
+                                <td>Production Rate</td>
+                                <td class="display-element" data-field="production_rate">{{ production_rate }}</td>
+                                <td>kg/h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <table class="table table-bordered custom-table">
+                        <tbody>
+                            <tr>
+                                <td>Tsticky (estimated)</td>
+                                <td class="col-6">
+                                    <input type="number" step="any" class="form-control input-field" name="tsticky">
+                                    <span class="display-element" style="display:none;"></span>
+                                </td>
+                                <td>°C</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center my-4">
+                    <button type="submit" class="btn btn-light" id="calculateButton" style="transform: translateX(-80px);">Calculate</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("massBalanceForm");
+        const formulaChartButtonContainer = document.getElementById("formulachartButtonContainer");
+
+        document.getElementById("calculateButton").addEventListener("click", function() {
+
+            formulaChartButtonContainer.style.display = "block";
+        });
+
+        document.getElementById("generateexcelButton").addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Fetch the form data
+            const formData = new FormData(form);
+
+            // Send a POST request to the server
+            fetch('/download_excel', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a link element to trigger the download
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'mass_balance.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Store the original input values
+            const originalValues = {};
+            const inputFields = document.querySelectorAll('.input-field');
+            inputFields.forEach(field => {
+                originalValues[field.getAttribute('name')] = field.value;
+            });
+
+            // Fetch the form data
+            const formData = new FormData(form);
+
+            // Send a POST request to the server
+            fetch('/mass_balance_tool', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle errors
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                // Update input fields with original and calculated values
+                inputFields.forEach(field => {
+                    const fieldName = field.getAttribute('name');
+                    if (fieldName in data) {
+                        field.value = data[fieldName];
+                    } else if (fieldName in originalValues) {
+                        field.value = originalValues[fieldName];
+                    }
+                });
+
+                // Update display elements with calculated values
+                const displayElements = document.querySelectorAll('.display-element[data-field]');
+                displayElements.forEach(element => {
+                    const fieldName = element.dataset.field;
+                    if (fieldName in data) {
+                        element.textContent = data[fieldName];
+                        element.style.display = 'inline'; // Show the display element
+                    } else {
+                        element.style.display = 'none'; // Hide the display element if no value is available
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('generatePDFButton').addEventListener('click', function() {
+            triggerPrint();
+        });
+
+        function triggerPrint() {
+            window.print();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("massBalanceForm");
+    const formulaChartModal = document.getElementById("formulaChartModal");
+    const formulaChartBody = formulaChartModal.querySelector(".modal-body");
+    // Function to update the formula chart modal with calculated values
+    function updateFormulaChart(data) {
+        formulaChartBody.innerHTML = `
+                <style>
+                * {
+                    font-family: 'Montserrat', sans-serif;
+                    color: black;
+                }
+                .modal-body {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                }
+                .modal-body p {
+                    color: black;
+                }
+                .modal-body h4 {
+                    color: #fe019a;
+                    font-weight: bold;
+                }
+                .center {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                .blank_row {
+                    height: 20px !important; /* overwrites any other rules */
+                    background-color: #FFFFFF;
+                }
+                </style>
+
+                <table class="center">
+                <tr>
+                    <td style="text-align: left">Hambient</td>
+                    <td style="text-align: right">${data['hambient']} kg/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Primary Air Enthalpy Change Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">G1 (primary airflow)</td>
+                    <td style="text-align: right">${data['g1']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tinlet</td>
+                    <td style="text-align: right">${data['tinlet']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Toutlet</td>
+                    <td style="text-align: right">${data['toutlet']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tavg1 (Tinlet + Toutlet) / 2</td>
+                    <td style="text-align: right">${data['tavg1']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Cp1 (1.0037 + 0.000032 * Tavg1 + 0.00000036 * (Tavg1)^2)</td>
+                    <td style="text-align: right">${data['cp1']} kJ/kg°C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Dh1 (G1 * (Tinlet - Toutlet) * Cp1)</td>
+                    <td style="text-align: right">${data['dh1']} kJ/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>SFB Air Enthalpy Change Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">G2 (SFB airflow)</td>
+                    <td style="text-align: right">${data['g2']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">TSFBin</td>
+                    <td style="text-align: right">${data['tsfbin']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tavg2</td>
+                    <td style="text-align: right">${data['tavg2']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Cp2</td>
+                    <td style="text-align: right">${data['cp2']} kJ/kg°C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Dh2</td>
+                    <td style="text-align: right">${data['dh2']} kJ/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Roof Cooling Air Enthalpy Change Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">G3 (roof cooling airflow)</td>
+                    <td style="text-align: right">${data['g3']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Troof (roof cooling temperature)</td>
+                    <td style="text-align: right">${data['troof']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tavg3</td>
+                    <td style="text-align: right">${data['tavg3']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Cp3</td>
+                    <td style="text-align: right">${data['cp3']} kJ/kg°C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Dh3</td>
+                    <td style="text-align: right">${data['dh3']} kJ/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Total Air Enthalpy Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">A</td>
+                    <td style="text-align: right">${data['a']}</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Concentrate Enthalpy Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tfeed</td>
+                    <td style="text-align: right">${data['tfeed']} °C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Cpwater</td>
+                    <td style="text-align: right">${data['cpwater']} kJ/kg°C</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Hwater</td>
+                    <td style="text-align: right">${data['hwater']} kJ/kg</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Total Concentrate Water Enthalpy Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">B</td>
+                    <td style="text-align: right">${data['b']} Kj/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Total Evaporation Calculation</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Evaporation</td>
+                    <td style="text-align: right">${data['evaporation']} kg/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Absolute Humidity of Evaporation Calculation + A24</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Houtlet</td>
+                    <td style="text-align: right">${data['houtlet']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Pbaro</td>
+                    <td style="text-align: right">${data['pbaro_1']} kPa</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">V</td>
+                    <td style="text-align: right">${data['v_1']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">W</td>
+                    <td style="text-align: right">${data['w_1']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">RH</td>
+                    <td style="text-align: right">${data['rh_1']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Tdummy</td>
+                    <td style="text-align: right">${data['tdummy']}</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Calculate the RH of the SFB Inlet Air</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">AH SFB Inlet Air</td>
+                    <td style="text-align: right">${data['sfb_inlet_AH']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">TSFBin</td>
+                    <td style="text-align: right">${data['tsfbin']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Pbaro</td>
+                    <td style="text-align: right">${data['barometric_pressure']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">SFB_V</td>
+                    <td style="text-align: right">${data['sfb_v']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">SFB_W</td>
+                    <td style="text-align: right">${data['sfb_w']}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">SFB_RH</td>
+                    <td style="text-align: right">${data['sfb_rh']}</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Calculate the Total Water Vapour Flows In and Out</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Water vapour flow in the primary airflow</td>
+                    <td style="text-align: right">${data['w1']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Water vapour flow in the SFB air</td>
+                    <td style="text-align: right">${data['w2']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Water vapour flow in the roof cooling air</td>
+                    <td style="text-align: right">${data['w3']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Water vapour flow of evaporation</td>
+                    <td style="text-align: right">${data['w4']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Total water vapour flowrate</td>
+                    <td style="text-align: right">${data['total_water_vapour_flowrate']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Total outlet airflow</td>
+                    <td style="text-align: right">${data['total_outlet_airflow']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Outlet air absolute humidity</td>
+                    <td style="text-align: right">${data['outlet_air_absolute_humidity']} g/kg dry air</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Calculate the Powder Production Rate</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Solids Flowrate=TS*Evaporation/(100-TS-(TS*Moisture)/(100-Moisture))</td>
+                    <td style="text-align: right">${data['solids_flowrate']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Powder Rate=Solids Rate + Solids Rate*Moisture/(100-Moisture)</td>
+                    <td style="text-align: right">${data['powder_rate']} kg/h</td>
+                </tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Add the Spray Drier Operating Line</h4>
+                    </td>
+                </tr>
+                <tr><td colspan="2">Heat and Mass Balance on Drier</td></tr>
+                <tr><td colspan="2">dh primary = G1 * (1000 * (Tin - To) * Cp1)</td></tr>
+                <tr><td colspan="2">dh secondary = G2 * (1000 * (Tsfb - To) * Cp2)</td></tr>
+                <tr><td colspan="2">AHe = ((dh primary + dh secondary) / (G1 + G2)) / (hw + 4.219 * (100 - Tfeed))</td></tr>
+                <tr><td colspan="2">Method:</td></tr>
+                <tr><td colspan="2">Tinlet, TSFBinlet, Tfeed, and Hambient are fixed</td></tr>
+                <tr><td colspan="2">Pick an outlet temperature</td></tr>
+                <tr><td colspan="2">Calculate Cp at the average of Tinlet and Toutlet</td></tr>
+                <tr><td colspan="2">Calculate dh primary drying</td></tr>
+                <tr><td colspan="2">Calculate Cp at the average of TSFBinlet and Toutlet</td></tr>
+                <tr><td colspan="2">Calculate dh secondary drying</td></tr>
+                <tr><td colspan="2">Calculate AH</td></tr>
+                <tr><td colspan="2">Calculate RH</td></tr>
+                <tr class="blank_row">
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" colspan="2">
+                        <h4>Calculate Barometric Pressure from Altitude (m)</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Altitude(m)</td>
+                    <td style="text-align: right">${data['altitude']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Altitude(000s feet)</td>
+                    <td style="text-align: right">${data['altitude_feet']} kg/h</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">Pbarometric</td>
+                    <td style="text-align: right">${data['barometric_pressure']} kg/h</td>
+                </tr>
+                </table>
+            `;
+        }
+
+        // Function to handle the "Show Formula Chart" button click
+    document.getElementById("formulachartButton").addEventListener("click", function() {
+        // Fetch the form data
+        const formData = new FormData(form);
+
+        // Send a POST request to the server
+        fetch('/mass_balance_tool', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle errors
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Update the formula chart modal with the calculated values
+            updateFormulaChart(data);
+
+            // Show the formula chart modal
+            $('#formulaChartModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    });
+
+</script>
+
+{% endblock content %}

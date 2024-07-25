@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Mass Balance Overview</h5>
                     <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
-                    <a href="http://localhost:5000/mass_balance" class="btn" id="mbBtn">Click Here</a>
+                    <a href="{% url 'mass_balance:index' %}" class="btn" id="mbBtn">Click Here</a>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Nozzle</h5>
                     <img class="card-img" src="static/img/dryer.jpg" alt="Card image cap">
-                    <a href="#" class="btn" id="mbBtn">Click Here</a>
+                    <a href="{% url 'nozzle:index' %}" class="btn" id="mbBtn">Click Here</a>
                 </div>
             </div>
         </div>
