@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Shared functions
@@ -52,11 +51,9 @@ def screen_for_orifice_range(k, orifice_num, ranges):
             results[key] = "**"
     return results
 
-@csrf_exempt
 def index(request):
-    return render(request, 'nozzle/index.html', {})
+    return render(request, 'nozzle/index.html')
 
-@csrf_exempt
 def tdl(request):
     if request.method == 'POST':
         try:
@@ -106,7 +103,6 @@ def tdl(request):
         except (ValueError, KeyError) as e:
             return JsonResponse({'error': f"An error occurred: {e}"})
 
-@csrf_exempt
 def td(request):
     if request.method == 'POST':
         try:

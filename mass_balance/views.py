@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-from io import BytesIO
-from openpyxl import Workbook
+import pandas as pd
 import math
 
 
@@ -107,28 +106,69 @@ def mass_balance_tool(request):
             }
 
             response_data = {
-                'input_data': {key: "{:,.3f}".format(value) if isinstance(value, float) else value for key, value in data.items()},
-                'sfb_inlet_rh': format_value(sfb_rh, "{:,.2f}"),
-                'outlet_air_ah': format_value(outlet_air_absolute_humidity, "{:,.2f}"),
-                'outlet_air_absolute_humidity': format_value(outlet_air_absolute_humidity, "{:,.2f}"),
-                'outlet_air_rh': format_value(rh_1, "{:,.2f}"),
-                'dummy_outlet_air_rh': format_value(rh_2, "{:,.2f}"),
-                'dummy_outlet_air_t': format_value(tdummy, "{:,.2f}"),
-                'tdummy': format_value(tdummy, "{:,.2f}"),
-                'production_rate': format_value(production_rate, "{:,.2f}"),
-                'barometric_pressure': format_value(barometric_pressure, "{:,.2f}"),
-                'cross_checking': format_value(cross_checking, "{:,.2f}"),
-                'primary_air_AH': format_value(data['primaryairAH'], "{:,.2f}"),
-                'sfb_inlet_AH': format_value(data['sfbinletAH'], "{:,.2f}"),
-                'primary_inlet_T': format_value(data['primaryinletT'], "{:,.2f}"),
-                'sfb_inlet_T': format_value(data['sfbinletT'], "{:,.2f}"),
-                'roof_cooling_T': format_value(data['roofcoolingT'], "{:,.2f}"),
-                'outlet_air_T': format_value(data['outletairT'], "{:,.2f}"),
-                'altitude': format_value(data['altitude'], "{:,.2f}"),
-                'total_solids': format_value(data['totalsolids'], "{:,.2f}"),
-                'temperature': format_value(data['temperature'], "{:,.2f}"),
-                'moisture': format_value(data['moisture'], "{:,.2f}")
-            }
+            'input_data': {key: "{:,.3f}".format(value) if isinstance(value, float) else value for key, value in data.items()},
+            'sfb_inlet_rh': format_value(sfb_rh, "{:,.2f}"),
+            'outlet_air_ah': format_value(outlet_air_absolute_humidity, "{:,.2f}"),
+            'outlet_air_absolute_humidity': format_value(outlet_air_absolute_humidity, "{:,.2f}"),
+            'outlet_air_rh': format_value(rh_1, "{:,.2f}"),
+            'dummy_outlet_air_rh': format_value(rh_2, "{:,.2f}"),
+            'dummy_outlet_air_t': format_value(tdummy, "{:,.2f}"),
+            'tdummy': format_value(tdummy, "{:,.2f}"),
+            'production_rate': format_value(production_rate, "{:,.2f}"),
+            'barometric_pressure': format_value(barometric_pressure, "{:,.2f}"),
+            'cross_checking': format_value(cross_checking, "{:,.2f}"),
+            'primary_air_AH': format_value(data['primaryairAH'], "{:,.2f}"),
+            'sfb_inlet_AH': format_value(data['sfbinletAH'], "{:,.2f}"),
+            'primary_inlet_T': format_value(data['primaryinletT'], "{:,.2f}"),
+            'sfb_inlet_T': format_value(data['sfbinletT'], "{:,.2f}"),
+            'roof_cooling_T': format_value(data['roofcoolingT'], "{:,.2f}"),
+            'outlet_air_T': format_value(data['outletairT'], "{:,.2f}"),
+            'altitude': format_value(data['altitude'], "{:,.2f}"),
+            'hambient': format_value(hambient, "{:,.2f}"),
+            'g1': format_value(g1, "{:,.0f}"),
+            'tinlet': format_value(tinlet, "{:,.1f}"),
+            'toutlet': format_value(toutlet, "{:,.1f}"),
+            'tavg1': format_value(tavg1, "{:,.1f}"),
+            'cp1': format_value(cp1, "{:,.3f}"),
+            'dh1': format_value(dh1, "{:,.1f}"),
+            'g2': format_value(data['sfbair'], "{:,.0f}"),
+            'tsfbin': format_value(data['sfbinletT'], "{:,.1f}"),
+            'tavg2': format_value(tavg2, "{:,.1f}"),
+            'cp2': format_value(cp2, "{:,.3f}"),
+            'dh2': format_value(dh2, "{:,.1f}"),
+            'g3': format_value(data['roofcoolingair'], "{:,.0f}"),
+            'troof': format_value(data['roofcoolingT'], "{:,.1f}"),
+            'tavg3': format_value(tavg3, "{:,.1f}"),
+            'cp3': format_value(cp3, "{:,.1f}"),
+            'dh3': format_value(dh3, "{:,.1f}"),
+            'a': format_value(a, "{:,.1f}"),
+            'tfeed': format_value(tfeed, "{:,.1f}"),
+            'cpwater': format_value(cpwater, "{:,.3f}"),
+            'hwater': format_value(hwater, "{:,.2f}"),
+            'b': format_value(b, "{:,.2f}"),
+            'evaporation': format_value(evaporation, "{:,.2f}"),
+            'solids_flowrate': format_value(solids_flowrate, "{:,.2f}"),
+            'powder_rate': format_value(powder_rate, "{:,.2f}"),
+            'total_water_vapour_flowrate': format_value(total_water_vapour_flowrate, "{:,.2f}"),
+            'total_outlet_airflow': format_value(total_outlet_airflow, "{:,.1f}"),
+            'houtlet': format_value(houtlet, "{:,.2f}"),
+            'pbaro_1': format_value(pbaro_1, "{:,.2f}"),
+            'v_1': format_value(v_1, "{:,.3f}"),
+            'w_1': format_value(w_1, "{:,.1f}"),
+            'rh_1': format_value(rh_1, "{:,.3f}"),
+            'pbaro_2': format_value(pbaro_2, "{:,.2f}"),
+            'v_2': format_value(v_2, "{:,.3f}"),
+            'w_2': format_value(w_2, "{:,.3f}"),
+            'sfb_v': format_value(sfb_v, "{:,.3f}"),
+            'sfb_w': format_value(sfb_w, "{:,.2f}"),
+            'sfb_rh': format_value(sfb_rh, "{:,.3f}"),
+            'w1': format_value(w1, "{:,.3f}"),
+            'w2': format_value(w2, "{:,.3f}"),
+            'w3': format_value(w3, "{:,.3f}"),
+            'w4': format_value(w4, "{:,.3f}"),
+            'altitude_feet': format_value(altitude_feet, "{:,.3f}"),
+            'error': None
+        }
 
             return JsonResponse(response_data)
 
@@ -139,17 +179,17 @@ def mass_balance_tool(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 def download_excel(request):
-    data = request.session.get('calculated_data', None)
+    data = request.session['calculated_data']
     if data:
-        wb = Workbook()
-        ws = wb.active
+        wb = []
         for key, value in data.items():
-            ws.append([key, value])
-        excel_data = BytesIO()
-        wb.save(excel_data)
-        excel_data.seek(0)
-        response = HttpResponse(excel_data, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=calculated_data.xlsx'
-        return response
+            wb.append([key, value])
+        df = pd.DataFrame(wb)
+        
+        resp = HttpResponse(content_type='text/csv')
+        resp['Content-Disposition'] = 'attachment; filename=Mass_Balance.csv'
+        df.to_csv(path_or_buf=resp, sep=',', index=False)
+        
+        return resp
     else:
         return HttpResponse("No calculated data found.", status=404)

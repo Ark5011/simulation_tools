@@ -30,7 +30,7 @@
     </div>
 
     <div class="container content-container">
-        <form id="massBalanceForm" action="/mass_balance_tool" method="POST">
+        <form id="massBalanceForm" method="POST">
             {% csrf_token %}
             <div class="container col-8 align-middle">
                 <h3>Humidities</h3>
@@ -235,6 +235,21 @@
     </div>
 
 <script>
+    function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("massBalanceForm");
@@ -252,16 +267,18 @@
             const formData = new FormData(form);
 
             // Send a POST request to the server
-            fetch('/download_excel', {
-                method: 'POST',
-                body: formData
+            fetch('/mass_balance/download_excel/', {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
             })
             .then(response => response.blob())
             .then(blob => {
                 // Create a link element to trigger the download
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = 'mass_balance.xlsx';
+                link.download = 'mass_balance.csv';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -281,11 +298,14 @@
 
             // Fetch the form data
             const formData = new FormData(form);
-
+            console.log(formData);
             // Send a POST request to the server
-            fetch('/mass_balance_tool', {
+            fetch('/mass_balance/mass_balance_tool/', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData,
             })
             .then(response => response.json())
             .then(data => {
@@ -681,9 +701,12 @@
         const formData = new FormData(form);
 
         // Send a POST request to the server
-        fetch('/mass_balance_tool', {
+        fetch('/mass_balance/mass_balance_tool/', {
             method: 'POST',
-            body: formData
+            headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            body: formData,
         })
         .then(response => response.json())
         .then(data => {
