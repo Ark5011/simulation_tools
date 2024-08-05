@@ -188,7 +188,22 @@ def generate_pdf(request):
     table2.setStyle(style)
     
     # Build the PDF
-    elements = [table, table2]
+    elements = [table, Spacer(1, 24), table2]
+    
+    if request.session['user_info']:
+        user_info = request.session['user_info']
+        elements.append(Spacer(1, 24))
+        elements.append(Paragraph("User Information:", styles['Heading2']))
+        elements.append(Paragraph(f"Name: {request.user.username}", styles['Normal']))
+        elements.append(Paragraph(f"Project: {user_info['project']}", styles['Normal']))
+        elements.append(Paragraph(f"Factory: {user_info['factory']}", styles['Normal']))
+        elements.append(Paragraph(f"Line: {user_info['line']}", styles['Normal']))
+        elements.append(Paragraph(f"Product: {user_info['product']}", styles['Normal']))
+        elements.append(Paragraph(f"Location: {user_info['location']}", styles['Normal']))
+    else:
+        elements.append(Spacer(1, 24))
+        elements.append(Paragraph("User Information: None", styles['Heading2']))
+        elements.append(Paragraph("Re-Login to input User Information", styles['Normal']))
     doc.build(elements)
     
     return response

@@ -25,24 +25,7 @@ def tg_form(request):
             f_GOS = form.cleaned_data['GOS']
             f_PDX = form.cleaned_data['PDX']
             f_lactose = form.cleaned_data['lactose']
-            
-            # user_info = request.session['user_info']
-            # obj, created = Formulation.objects.update_or_create(
-            #     user=request.user.username,
-            #     project=user_info['project'],
-            #     defaults=form,
-            #     create_defaults=form,
-            # )
-            
-            # if Formulation.objects.filter(user=request.user.username, project=user_info['project']) == 0:
-            #     record = form.save(commit=False)
-            #     record.user = request.user.username
-            #     record.project = user_info['project']
-            #     record.save()
-            # else:
-            #     Formulation.objects.get(user=request.user.username, project=user_info['project']).update(water_min=f_water_min, casein=f_casein, whey_protein=f_whey_protein, GOS=f_GOS, PDX=f_PDX, lactose=f_lactose)
                 
-            
             f_sum_min = sum([f_water_min, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
             f_sum_target = sum([f_water_target, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
             f_sum_max = sum([f_water_max, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX])
@@ -63,32 +46,32 @@ def tg_form(request):
             wi_sum_max = sum([wi_water_max, wi_casein, wi_whye_protein, wi_lactose, wi_GOS, wi_PDX])
             
             #Cp * Wi values
-            cp_values = Cp.objects.all()
-            cpwi_water_min = wi_water_min * cp_values[0].water
-            cpwi_water_target = wi_water_target * cp_values[0].water
-            cpwi_water_max = wi_water_max * cp_values[0].water
+            cp_value = {'water':1.94, 'casein':0.26, 'whey_protein':0.09, 'lactose':0.38, 'gos':0.24, 'pdx':0.473}
+            cpwi_water_min = wi_water_min * cp_value['water']
+            cpwi_water_target = wi_water_target * cp_value['water']
+            cpwi_water_max = wi_water_max * cp_value['water']
             
-            cpwi_casein = wi_casein * cp_values[0].casein
-            cpwi_whye_protein = wi_whye_protein * cp_values[0].whey_protein
-            cpwi_lactose = wi_lactose * cp_values[0].lactose
-            cpwi_GOS = wi_GOS * cp_values[0].GOS
-            cpwi_PDX = wi_PDX * cp_values[0].PDX
+            cpwi_casein = wi_casein * cp_value['casein']
+            cpwi_whye_protein = wi_whye_protein * cp_value['whey_protein']
+            cpwi_lactose = wi_lactose * cp_value['lactose']
+            cpwi_GOS = wi_GOS * cp_value['gos']
+            cpwi_PDX = wi_PDX * cp_value['pdx']
             
             cpwi_sum_min = sum([cpwi_water_min, cpwi_casein, cpwi_whye_protein, cpwi_lactose, cpwi_GOS, cpwi_PDX])
             cpwi_sum_target = sum([cpwi_water_target, cpwi_casein, cpwi_whye_protein, cpwi_lactose, cpwi_GOS, cpwi_PDX])
             cpwi_sum_max = sum([cpwi_water_max, cpwi_casein, cpwi_whye_protein, cpwi_lactose, cpwi_GOS, cpwi_PDX])
             
             #Cp * Wi * Tg values
-            tg_values = Tg.objects.all()
-            cpwitg_water_min = cpwi_water_min * tg_values[0].water
-            cpwitg_water_target = cpwi_water_target * tg_values[0].water
-            cpwitg_water_max = cpwi_water_max * tg_values[0].water
+            tg_value = {'water':-135, 'casein':132, 'whey_protein':127, 'lactose':101, 'gos':31, 'pdx':63}
+            cpwitg_water_min = cpwi_water_min * tg_value['water']
+            cpwitg_water_target = cpwi_water_target * tg_value['water']
+            cpwitg_water_max = cpwi_water_max * tg_value['water']
             
-            cpwitg_casein = cpwi_casein * tg_values[0].casein
-            cpwitg_whye_protein = cpwi_whye_protein * tg_values[0].whey_protein
-            cpwitg_lactose = cpwi_lactose * tg_values[0].lactose
-            cpwitg_GOS = cpwi_GOS * tg_values[0].GOS
-            cpwitg_PDX = cpwi_PDX * tg_values[0].PDX
+            cpwitg_casein = cpwi_casein * tg_value['casein']
+            cpwitg_whye_protein = cpwi_whye_protein * tg_value['whey_protein']
+            cpwitg_lactose = cpwi_lactose * tg_value['lactose']
+            cpwitg_GOS = cpwi_GOS * tg_value['gos']
+            cpwitg_PDX = cpwi_PDX * tg_value['pdx']
             
             cpwitg_sum_min = sum([cpwitg_water_min, cpwitg_casein, cpwitg_whye_protein, cpwitg_lactose, cpwitg_GOS, cpwitg_PDX])
             cpwitg_sum_target = sum([cpwitg_water_target, cpwitg_casein, cpwitg_whye_protein, cpwitg_lactose, cpwitg_GOS, cpwitg_PDX])
@@ -99,8 +82,8 @@ def tg_form(request):
             final_tg_max = cpwitg_sum_max / cpwi_sum_max
             
             ingredients = ['Water', 'Casein', 'Whey Protein', 'Lactose', 'GOS', 'PDX', 'Sum']
-            tg_values = [tg_values[0].water, tg_values[0].casein, tg_values[0].whey_protein, tg_values[0].lactose, tg_values[0].GOS, tg_values[0].PDX, '']
-            cp_values = [cp_values[0].water, cp_values[0].casein, cp_values[0].whey_protein, cp_values[0].lactose, cp_values[0].GOS, cp_values[0].PDX, '']
+            tg_values = [tg_value['water'], tg_value['casein'], tg_value['whey_protein'], tg_value['lactose'], tg_value['gos'], tg_value['pdx'], '']
+            cp_values = [cp_value['water'], cp_value['casein'], cp_value['whey_protein'], cp_value['lactose'], cp_value['gos'], cp_value['pdx'], '']
             
             f_values_min = [f_water_min, f_casein, f_whey_protein, f_lactose, f_GOS, f_PDX, f_sum_min]
             f_values_min_rounded = [round(x,3) for x in f_values_min]
