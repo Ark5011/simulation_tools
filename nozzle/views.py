@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import json
+from django.contrib.auth.decorators import login_required
 
 # Shared functions
 def format_value(value, fmt):
@@ -51,9 +52,11 @@ def screen_for_orifice_range(k, orifice_num, ranges):
             results[key] = "**"
     return results
 
+@login_required(login_url='home:login')
 def index(request):
     return render(request, 'nozzle/index.html')
 
+@login_required(login_url='home:login')
 def tdl(request):
     if request.method == 'POST':
         try:
@@ -103,6 +106,7 @@ def tdl(request):
         except (ValueError, KeyError) as e:
             return JsonResponse({'error': f"An error occurred: {e}"})
 
+@login_required(login_url='home:login')
 def td(request):
     if request.method == 'POST':
         try:

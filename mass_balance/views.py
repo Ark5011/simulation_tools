@@ -2,14 +2,16 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import pandas as pd
 import math
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='home:login')
 def index(request):
     return render(request, 'mass_balance/mass_balance_fe.html', {'input_data': {}})
 
 def format_value(value, fmt):
     return fmt.format(value) if isinstance(value, (float, int)) else value
 
+@login_required(login_url='home:login')
 def mass_balance_tool(request):
     try:
         if request.method == 'POST':
@@ -178,6 +180,7 @@ def mass_balance_tool(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@login_required(login_url='home:login')
 def download_excel(request):
     data = request.session['calculated_data']
     if data:

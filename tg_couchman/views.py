@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import pandas as pd
 from .forms import TgForm
-from .models import Tg, Cp, Formulation
+from .models import Tg, Cp
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
 from reportlab.lib import colors
@@ -176,7 +176,6 @@ def exportFile(request):
     tg_data = request.session['tg_data']
     
     excel_data = [
-        ['STAGE 3', '', '', 'Min Moisture'],
         ['Ingredients', 'Tg (C)', 'Cp (J/g/C)', 'Formulation (%)', 'Wi', 'Cp X Wi', 'Cp X Wi X Tg', 'Tg'],
     ]
     for ingredients, tg_values, cp_values, f_values_min, wi_values_min, cpwi_values_min, cpwitg_values_min, final_tg_min_list in tg_data['zipped_min']:
@@ -199,7 +198,7 @@ def exportFile(request):
         row = [ingredients, tg_values, cp_values, f_values_max, wi_values_max, cpwi_values_max, cpwitg_values_max, final_tg_max_list]
         excel_data.append(row)
     
-    df = pd.DataFrame(excel_data)
+    df = pd.DataFrame(excel_data, columns=['STAGE 3', '', '', 'Min Moisture','','','',''])
     
     resp = HttpResponse(content_type='text/csv')
     resp['Content-Disposition'] = 'attachment; filename=Tg_Couchman.csv'
@@ -209,8 +208,6 @@ def exportFile(request):
 
 @login_required(login_url='home:login')
 def generate_pdf(request):
-    
-    user_info = request.session['user_info']
     tg_data = request.session.get('tg_data_rounded')
     
     # Create a response object
@@ -251,14 +248,20 @@ def generate_pdf(request):
     create_table(tg_data['zipped_target'], "Target moisture")
     create_table(tg_data['zipped_max'], "Max moisture")
     
-    elements.append(Spacer(1, 24))
-    elements.append(Paragraph("User Information:", styles['Heading2']))
-    elements.append(Paragraph(f"Name: {request.user.username}", styles['Normal']))
-    elements.append(Paragraph(f"Project: {user_info['project']}", styles['Normal']))
-    elements.append(Paragraph(f"Factory: {user_info['factory']}", styles['Normal']))
-    elements.append(Paragraph(f"Line: {user_info['line']}", styles['Normal']))
-    elements.append(Paragraph(f"Product: {user_info['product']}", styles['Normal']))
-    elements.append(Paragraph(f"Location: {user_info['location']}", styles['Normal']))
+    if request.session['user_info']:
+        user_info = request.session['user_info']
+        elements.append(Spacer(1, 24))
+        elements.append(Paragraph("User Information:", styles['Heading2']))
+        elements.append(Paragraph(f"Name: {request.user.username}", styles['Normal']))
+        elements.append(Paragraph(f"Project: {user_info['project']}", styles['Normal']))
+        elements.append(Paragraph(f"Factory: {user_info['factory']}", styles['Normal']))
+        elements.append(Paragraph(f"Line: {user_info['line']}", styles['Normal']))
+        elements.append(Paragraph(f"Product: {user_info['product']}", styles['Normal']))
+        elements.append(Paragraph(f"Location: {user_info['location']}", styles['Normal']))
+    else:
+        elements.append(Spacer(1, 24))
+        elements.append(Paragraph("User Information: None", styles['Heading2']))
+        elements.append(Paragraph("Re-Login to input User Information", styles['Normal']))
     
     # Build the document
     doc.build(elements)
