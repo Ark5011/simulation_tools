@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    color: white;
+    padding-top: 70px;
+    background-color: #ffc9fd;
+    background: linear-gradient(to top, #fbb4df, #fe019a);
+}
+
+.custom-table {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 65%;
+    margin: auto;
+    border-collapse: collapse;
+    transform: translateX(-80px);
+}
+
+.custom-table td,
+    .custom-table th {
+    border-color: white;
+    padding: 10px; /* Adjust padding as needed */
+    text-align: center; /* Adjust text alignment as needed */
+    vertical-align: middle;
+}
+
+.custom-table td:nth-child(3),
+.custom-table th:nth-child(3) {
+    width: 25%;
+}
+
+.custom-table td:nth-child(1),
+.custom-table th:nth-child(1),
+.custom-table td:nth-child(2),
+.custom-table th:nth-child(2) {
+    width: 50%;
+}
+
+.table-container {
+    background-color: transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+.content-container {
+    margin-left: -80px;
+}
+
+h3 {
+    color: white;
+}
+
+.navbar {
+    z-index: 1000;
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+.navbar-collapse a {
+    color: black;
+    font-size: 20px;
+}
+
+.navbar-collapse a:hover {
+    color: #fe019a;
+}
+
+.table-container table {
+    text-align: left; /* Align table contents to the left */
+    table-layout: fixed; /* Fix table layout to ensure consistent column width */
+}
+
+.input-field {
+    width: 100%; /* Set input fields to occupy full width of the container */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+.table-container td, .table-container th {
+    vertical-align: middle; /* Align table cell contents vertically */
+    font-weight: bold; /* Keep font weight as bold */
+    font-size: 13px; /* Adjust font size */
+    font-family: 'Montserrat', sans-serif;
+    width: calc(33.33% - 30px); /* Equal width for all columns, considering padding */
+    padding: 5px; /* Add padding to table cells */
+}
+
+.container h1 {
+    margin-top: 50px;
+}
+
+.custom-modal-size {
+    max-width: 50%; /* Adjust the value as needed */
+}

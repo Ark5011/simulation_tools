@@ -22,14 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-# SECRET_KEY='django-insecure-2v$&*0c=!tht4#mz!zhn4%d-9m5hf261_vyr*oi6svp($u64gz'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-# DEBUG = True
+
 
 ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS').split(' ')
-# ALLOWED_HOSTS = ['*']
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -90,7 +90,6 @@ DATABASES = {
 }
 
 database_url = os.environ.get('DATABASE_URL')
-# database_url = "postgresql://project_pyramid_sql_user:NigpfuQxtM89eMJw7FlrTvL15iIDqMhY@dpg-cqomldggph6c73f8tgo0-a.singapore-postgres.render.com/project_pyramid_sql"
 DATABASES['default'] = dj_database_url.parse(database_url)
 
 
