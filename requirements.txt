@@ -9,3 +9,5 @@ gunicorn==22.0.0
 h11==0.14.0
 uvicorn==0.30.5
 python-decouple==3.8
+dj-database-url==2.2.0
+psycopg2==2.9.9
